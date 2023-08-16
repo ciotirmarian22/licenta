@@ -1,0 +1,16 @@
+<%- contentFor('body') %>
+
+<% if(mesajEroare != "") {%>
+	<p style="color:red; font-size: 100px; text-align: center; padding-top:10px;" ><%=mesajEroare%></p>
+<% } %>
+
+
+<div class="autentificare">
+	<form method="POST" action="/verificare-autentificare">
+		<p id="date_utilizator">Username</p>
+		<input id="introducere_utilizator" type="text" name="user">
+		<p id="date_utilizator">Password</p>
+		<input id="introducere_utilizator" type="password" name="pass"><br><br><br>
+		<input id="buton_simplu" type="submit" value="Inainte">
+	</form>
+</div>

@@ -1,0 +1,15 @@
+[
+    { 
+        "utilizator":"admin",
+        "pass":"admin",
+        "nume":"Rautu",
+        "prenume": "Razvan"
+    },
+
+    {
+        "utilizator":"user",
+        "pass": "user",
+        "nume":"User Nume",
+        "prenume": "User Prenume"
+    }
+]

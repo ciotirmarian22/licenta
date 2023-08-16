@@ -1,0 +1,28 @@
+<%- contentFor('body') %>
+
+<br></br>
+
+<button id="butoane">
+    <a href='autentificare'>Autentificare</a>
+</button> &nbsp; &nbsp; &nbsp;
+<br></br>
+<button id="butoane">
+    <a href='chestionar'>Chestionar</a>
+</button> &nbsp; &nbsp; &nbsp;
+<br></br>
+<button id="butoane">
+    <a href='creare-BD'>Creare baza de date</a>
+</button> &nbsp; &nbsp; &nbsp;
+<br></br>
+<button id="butoane">
+    <a href='inserare-BD'>Inserare baza de date</a>
+</button> &nbsp; &nbsp; &nbsp;
+
+<div id="produse">
+    <h1>Product List</h1>
+    <ul>
+        <% for (var i = 0; i < products.length; i++) { %>
+        <li><%= products[i].name %> - <%= products[i].pret %></li>
+        <% } %>
+    </ul>
+</div>
