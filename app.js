@@ -39,11 +39,18 @@ app.use('/css', express.static('css'));
 
 app.get('/', (req, res) => {
     con.query("SELECT * FROM produse", function (err, result, fields) {
-      if (err) throw err;
-      const products = result;
-      res.render('index', { products: products });
+        if (err) throw err;
+        const products = result;
+
+        if (req.cookies.tipUtilizator === "administrator") {
+            // Afișați conținut specific pentru administrator
+            res.render('index_admin', { products: products });
+        } else {
+            // Afișați conținut specific pentru utilizator normal
+            res.render('index_normal', { products: products });
+        }
     });
-  });
+});
 
 var mesaj="";
 app.get('/', (req, res) => {
@@ -120,6 +127,8 @@ app.post('/verificare-autentificare', (req, res) => {
 
     if(ok==1){
         res.cookie('utilizator', name);
+        res.cookie('tipUtilizator', _utilizatori[i].tip); // Adăugați acest rând
+        console.log(_utilizatori[i].tip);
         res.redirect("http://localhost:6789");
     }
     else{
