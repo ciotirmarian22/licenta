@@ -52,6 +52,10 @@ app.get('/', (req, res) => {
     });
 });
 
+app.get('/istoric', (req, res) => {
+    res.render('istoric');
+});
+
 var mesaj="";
 app.get('/', (req, res) => {
     if(req.cookies != null && req.cookies.utilizator != null){

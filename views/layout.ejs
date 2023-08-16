@@ -12,6 +12,20 @@
             <p>Electrocasnice</p>
             <button id="buton_home" ><a href='/home'>Home</a></button>
         </header>
+        <div id="calendar"></div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            plugins: [ 'dayGrid' ],
+            events: events
+        });
+
+        calendar.render();
+    });
+    </script>
 
         <footer>
 
