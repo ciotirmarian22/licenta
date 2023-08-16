@@ -6,6 +6,9 @@ const app = express();
 const port = 6789;
 const mysql = require('mysql2');
 
+app.use(express.static('public'));
+//app.use('/js', express.static('js'));
+
 // Database connection
 const con = mysql.createConnection({
     host: "localhost",
@@ -53,8 +56,10 @@ app.get('/', (req, res) => {
 });
 
 app.get('/istoric', (req, res) => {
+    
     res.render('istoric');
 });
+
 
 var mesaj="";
 app.get('/', (req, res) => {

@@ -1,6 +1,13 @@
 <%- contentFor('body') %>
 
-<button id="butoane">
-    <a href='test'>test</a>
-</button> &nbsp; &nbsp; &nbsp;
-<br></br>
+<label for="data">Data:</label>
+<input class="culoare" type="date" id="data" name="data">
+<button id="addEventButton">Add Event</button>
+<br><br>
+
+<div id="calendar"></div>
+
+<!-- Include the following <script> tag -->
+<script src="/js/calendar.js"></script>
+</body>
+</html>
