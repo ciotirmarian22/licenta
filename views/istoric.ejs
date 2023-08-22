@@ -5,19 +5,26 @@
 <button id="addEventButton">Add Event</button>
 <br><br>
 
-<div id="calendar"></div>
+<div id="calendar">
+    <input type="text" id="searchBar" placeholder="Search for products">
+    <ul id="searchResults"></ul>
+</div>
 <script src="/js/calendar.js"></script>
 <!-- Include the following <script> tag -->
 
     <div id="produse">
         <h1>Masa1</h1>
         <ul>
-            <% for (var i = 0; i < products.length; i++) { %>
-            <li><%= products[i].dataa %> - <%= products[i].masa1 %> - <%= products[i].calorii_masa1 %></li>
+            <% for (var i = 0; i < userData.length; i++) { %>
+            <li><%= userData[i].dataa %> - <%= userData[i].masa1 %> - <%= userData[i].calorii_masa1 %></li>
             <% } %>
         </ul>
         
     </div>
+    <script>
+        const produse = <%- JSON.stringify(produse) %>;
+    </script>
+    <script src="/js/search.js"></script>
 
 </body>
 </html>

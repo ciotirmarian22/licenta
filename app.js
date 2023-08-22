@@ -43,14 +43,14 @@ app.use('/css', express.static('css'));
 app.get('/', (req, res) => {
     con.query("SELECT * FROM produse", function (err, result, fields) {
         if (err) throw err;
-        const products = result;
+        const produse = result;
 
         if (req.cookies.tipUtilizator === "administrator") {
             // Afișați conținut specific pentru administrator
-            res.render('index_admin', { products: products });
+            res.render('index_admin', { produse: produse });
         } else {
             // Afișați conținut specific pentru utilizator normal
-            res.render('index_normal', { products: products });
+            res.render('index_normal', { produse: produse });
         }
     });
 });
@@ -67,14 +67,16 @@ app.post('/save-selected-date', (req, res) => {
 
 
 app.get('/istoric', (req, res) => {
-    
-    // Now you can use the selectedDate variable in your app.js file
-    //console.log("Selected Date from app.js:", selectedDate);
-    con.query("SELECT * FROM user_date", function (err, result, fields) {
-        if(err) throw err;
-        const products = result;
+    con.query("SELECT * FROM produse", function (err, produseResult, fields) {
+        if (err) throw err;
+        const produse = produseResult;
 
-    res.render('istoric', { products: products });
+        con.query("SELECT * FROM user_date", function (err, userDataResult, fields) {
+            if (err) throw err;
+            const userData = userDataResult;
+            
+            res.render('istoric', { produse: produse, userData: userData });
+        });
     });
 });
 
