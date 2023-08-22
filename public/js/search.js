@@ -55,7 +55,10 @@ function handleSearch(produse, searchBar) {
             // Access the selected product's id and other details
             const selectedProductId = selectedProduct.id;
     
-            // Here, you can send the selected product's id to the server to add it to the database
+            // Get the selected date from the input field
+            const selectedDate = document.getElementById("data").value;
+    
+            // Here, you can send the selected product's id and selected date to the server to add it to the database
             // For example, using the Fetch API or XMLHttpRequest
     
             // Make an AJAX request to add the selected product's id to the database
@@ -64,7 +67,8 @@ function handleSearch(produse, searchBar) {
             xhr.setRequestHeader("Content-Type", "application/json");
     
             const data = {
-                id: selectedProductId
+                id: selectedProductId,
+                date: selectedDate
             };
     
             xhr.onreadystatechange = function () {

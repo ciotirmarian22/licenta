@@ -62,8 +62,21 @@ app.post('/save-selected-date', (req, res) => {
     console.log("Received selectedDate:", selectedDate);
 
     // Here you can process the selectedDate and send a response back to the client
-    res.json({ message: 'Date received successfully' });
+
+    const sql = `INSERT INTO user_date (dataa) VALUES (?)`;
+    con.query(sql, selectedDate, (err, result) => {
+        if (err) {
+            console.error("Error inserting into user_date table:", err);
+            res.status(500).send("Error inserting into user_date table");
+        } else {
+            console.log("selected date added to user_date:", selectedDate);
+
+            // Send the success response as a JSON object
+            res.json({ message: 'Date received and added to user_date successfully' });
+        }
+    });
 });
+
 
 
 app.get('/istoric', (req, res) => {
@@ -82,17 +95,36 @@ app.get('/istoric', (req, res) => {
 
 app.post("/add-to-masa1", (req, res) => {
     const selectedProductId = req.body.id;
+    const selectedDate = req.body.date;
 
-    // Update the user_date table to add the selected product's id to the masa1 field
-    const sql = `UPDATE user_date SET masa1 = ? WHERE /* Add your condition here */`;
-
-    con.query(sql, [selectedProductId], (err, result) => {
-        if (err) {
-            console.error("Error updating user_date table:", err);
-            res.status(500).send("Error updating user_date table");
+    // Fetch the current value of the masa1 field for the selected date
+    const fetchSql = `SELECT masa1 FROM user_date WHERE dataa = ?`;
+    con.query(fetchSql, [selectedDate], (fetchErr, fetchResult) => {
+        if (fetchErr) {
+            console.error("Error fetching masa1 value:", fetchErr);
+            res.status(500).send("Error fetching masa1 value");
         } else {
-            console.log("Product id added to masa1 field:", selectedProductId);
-            res.status(200).send("Product id added to masa1 field");
+            const currentMasa1 = fetchResult[0].masa1;
+            let updatedMasa1 = currentMasa1;
+
+            // Check if the currentMasa1 is not empty
+            if (currentMasa1) {
+                updatedMasa1 += `,${selectedProductId}`;
+            } else {
+                updatedMasa1 = selectedProductId.toString();
+            }
+
+            // Update the user_date table with the updatedMasa1 value
+            const updateSql = `UPDATE user_date SET masa1 = ? WHERE dataa = ?`;
+            con.query(updateSql, [updatedMasa1, selectedDate], (updateErr, updateResult) => {
+                if (updateErr) {
+                    console.error("Error updating user_date table:", updateErr);
+                    res.status(500).send("Error updating user_date table");
+                } else {
+                    console.log("Product id added to masa1 field:", selectedProductId);
+                    res.status(200).send("Product id added to masa1 field");
+                }
+            });
         }
     });
 });
@@ -192,25 +224,32 @@ app.get('/creare-BD', (req,res) => {
         con.query("CREATE DATABASE IF NOT EXISTS licenta;", function (err,result) {
             if(err) throw err;
             console.log("Baza de date a fost creata");
-            con.query("USE licenta");
+            con.query("USE licenta", function(err, result) {
                 if(err) throw err;
                 console.log("Use licenta");
-                con.query("CREATE TABLE if not exists produse(id INT(3), name VARCHAR(50),pret INT(15));", function (err, result) {
+                con.query("CREATE TABLE if not exists produse (id INT(3), name VARCHAR(50), pret INT(15));", function (err, result) {
                     if (err) throw err;
                     console.log("Tabela produse a fost creata");
                 });
+
+                con.query("CREATE TABLE if not exists user_date (dataa DATE UNIQUE, masa1 TEXT, calorii_masa1 INT, masa2 TEXT, calorii_masa2 INT, masa3 TEXT, calorii_masa3 INT);", function (err, result) {
+                    if (err) throw err;
+                    console.log("Tabela user_date a fost creata");
+                });
             });
+        });
     });
     res.redirect("http://localhost:6789/")
 });
 
 
-app.get('/inserare-BD',(req,res) => { 
-	 con.connect(function(err) {
-		if (err) throw err;
-		console.log("Connected!");
-		var sql = "INSERT INTO produse (id,name, pret) VALUES ?";
-		var values = [
+
+app.get('/inserare-BD',(req,res) => {
+    con.connect(function(err) {
+        if (err) throw err;
+        console.log("Connected!");
+        var sql = "INSERT INTO produse (id,name, pret) VALUES ?";
+        var values = [
             [1, 'Mere', 52],
             [2, 'Banane', 96],
             [3, 'Cartofi', 77],
@@ -222,15 +261,14 @@ app.get('/inserare-BD',(req,res) => {
             [9, 'Carne de vită', 250],
             [10, 'Pâine integrală', 79]
         ];
-		con.query(sql, [values],function (err, result) {
-		  if (err) throw err;
-		  console.log("Number of records inserted: "+ result.affectedRows);
-		});
-	  });
+        con.query(sql, [values],function (err, result) {
+            if (err) throw err;
+            console.log("Number of records inserted: "+ result.affectedRows);
 
-	 res.redirect("http://localhost:6789/");
-
-
-}); 
+            // Send the response after the insertion is complete
+            res.redirect("http://localhost:6789/");
+        });
+    });
+});
 
 app.listen(port, () => console.log('Serverul rulează la adresa http://localhost:'));
