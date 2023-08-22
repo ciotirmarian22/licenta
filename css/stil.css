@@ -157,3 +157,8 @@ div.rezultat_chestionar{
     transform: translate(-50%, -10%);
   }
 
+/* Add this CSS to your existing CSS file or include a new CSS file */
+.selected {
+    background-color: #f0f0f0;
+    font-weight: bold;
+}

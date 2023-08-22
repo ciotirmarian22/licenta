@@ -80,6 +80,23 @@ app.get('/istoric', (req, res) => {
     });
 });
 
+app.post("/add-to-masa1", (req, res) => {
+    const selectedProductId = req.body.id;
+
+    // Update the user_date table to add the selected product's id to the masa1 field
+    const sql = `UPDATE user_date SET masa1 = ? WHERE /* Add your condition here */`;
+
+    con.query(sql, [selectedProductId], (err, result) => {
+        if (err) {
+            console.error("Error updating user_date table:", err);
+            res.status(500).send("Error updating user_date table");
+        } else {
+            console.log("Product id added to masa1 field:", selectedProductId);
+            res.status(200).send("Product id added to masa1 field");
+        }
+    });
+});
+
 
 var mesaj="";
 app.get('/', (req, res) => {

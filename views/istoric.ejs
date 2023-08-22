@@ -9,22 +9,38 @@
     <input type="text" id="searchBar" placeholder="Search for products">
     <ul id="searchResults"></ul>
 </div>
-<script src="/js/calendar.js"></script>
+
+<div id="produse">
+    <h1>Masa1</h1>
+    <ul>
+        <% for (var i = 0; i < userData.length; i++) { %>
+        <li><%= userData[i].dataa %> - <%= userData[i].masa1 %> - <%= userData[i].calorii_masa1 %></li>
+        <% } %>
+    </ul>
+</div>
+
+<div id="selectedProduct">
+    <h2>Selected Product:</h2>
+    <p id="selectedProductName"></p>
+    <button id="addToDatabaseButton" disabled>Add to Database</button>
+</div>
+
 <!-- Include the following <script> tag -->
+<script src="/js/calendar.js"></script>
 
-    <div id="produse">
-        <h1>Masa1</h1>
-        <ul>
-            <% for (var i = 0; i < userData.length; i++) { %>
-            <li><%= userData[i].dataa %> - <%= userData[i].masa1 %> - <%= userData[i].calorii_masa1 %></li>
-            <% } %>
-        </ul>
-        
-    </div>
-    <script>
-        const produse = <%- JSON.stringify(produse) %>;
-    </script>
-    <script src="/js/search.js"></script>
+<!-- Define the handleSearch function -->
+<script>
+    function handleSearch(produse, searchBar) {
+        // Your handleSearch function code here...
+    }
+</script>
 
+<!-- Include the produse data -->
+<script>
+    const produse = <%- JSON.stringify(produse) %>;
+</script>
+
+<!-- Include the search.js script -->
+<script src="/js/search.js"></script>
 </body>
 </html>
