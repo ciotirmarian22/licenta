@@ -55,9 +55,27 @@ app.get('/', (req, res) => {
     });
 });
 
+
+
+app.post('/save-selected-date', (req, res) => {
+    const selectedDate = req.body.selectedDate;
+    console.log("Received selectedDate:", selectedDate);
+
+    // Here you can process the selectedDate and send a response back to the client
+    res.json({ message: 'Date received successfully' });
+});
+
+
 app.get('/istoric', (req, res) => {
     
-    res.render('istoric');
+    // Now you can use the selectedDate variable in your app.js file
+    //console.log("Selected Date from app.js:", selectedDate);
+    con.query("SELECT * FROM user_date", function (err, result, fields) {
+        if(err) throw err;
+        const products = result;
+
+    res.render('istoric', { products: products });
+    });
 });
 
 

@@ -6,8 +6,18 @@
 <br><br>
 
 <div id="calendar"></div>
-
-<!-- Include the following <script> tag -->
 <script src="/js/calendar.js"></script>
+<!-- Include the following <script> tag -->
+
+    <div id="produse">
+        <h1>Masa1</h1>
+        <ul>
+            <% for (var i = 0; i < products.length; i++) { %>
+            <li><%= products[i].dataa %> - <%= products[i].masa1 %> - <%= products[i].calorii_masa1 %></li>
+            <% } %>
+        </ul>
+        
+    </div>
+
 </body>
 </html>
