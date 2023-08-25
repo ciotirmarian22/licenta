@@ -5,6 +5,12 @@
 <button id="addEventButton">Add Event</button>
 <br><br>
 
+<div>
+    <label for="eventText">Nr calorii:</label>
+    <input type="text" id="eventText" name="eventText">
+    <button id="addTextButton">Insereaza</button>
+</div>
+
 <div id="calendar">
     <input type="text" id="searchBar" placeholder="Search for products">
     <ul id="searchResults"></ul>
@@ -42,5 +48,13 @@
 
 <!-- Include the search.js script -->
 <script src="/js/search.js"></script>
+
+<script>
+    const addTextButton = document.getElementById("addTextButton");
+    addTextButton.addEventListener("click", function () {
+        const eventText = document.getElementById("eventText").value;
+        console.log("Event Text:", eventText);
+    });
+</script>
 </body>
 </html>
