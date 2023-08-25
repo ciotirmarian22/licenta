@@ -93,6 +93,12 @@ app.get('/istoric', (req, res) => {
     });
 });
 
+app.post('/add-event-text', (req, res) => {
+    const eventText = req.body.eventText;
+    console.log("Received eventText:", eventText);
+    res.json({ message: 'Event text received successfully' });
+});
+
 app.post("/add-to-masa1", (req, res) => {
     const selectedProductId = req.body.id;
     const selectedDate = req.body.date;

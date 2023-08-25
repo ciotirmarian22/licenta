@@ -6,7 +6,7 @@
 <br><br>
 
 <div>
-    <label for="eventText">Nr calorii:</label>
+    <label for="eventText">Gramaj:</label>
     <input type="text" id="eventText" name="eventText">
     <button id="addTextButton">Insereaza</button>
 </div>
@@ -16,6 +16,12 @@
     <ul id="searchResults"></ul>
 </div>
 
+<div id="selectedProduct">
+    <h2>Selected Product:</h2>
+    <p id="selectedProductName"></p>
+    <button id="addToDatabaseButton" disabled>Add to Database</button>
+</div>
+
 <div id="produse">
     <h1>Masa1</h1>
     <ul>
@@ -23,12 +29,6 @@
         <li><%= userData[i].dataa %> - <%= userData[i].masa1 %> - <%= userData[i].calorii_masa1 %></li>
         <% } %>
     </ul>
-</div>
-
-<div id="selectedProduct">
-    <h2>Selected Product:</h2>
-    <p id="selectedProductName"></p>
-    <button id="addToDatabaseButton" disabled>Add to Database</button>
 </div>
 
 <!-- Include the following <script> tag -->
@@ -49,12 +49,8 @@
 <!-- Include the search.js script -->
 <script src="/js/search.js"></script>
 
-<script>
-    const addTextButton = document.getElementById("addTextButton");
-    addTextButton.addEventListener("click", function () {
-        const eventText = document.getElementById("eventText").value;
-        console.log("Event Text:", eventText);
-    });
-</script>
+<!-- Include the calorii.js script -->
+<script src="/js/calorii.js"></script>
+
 </body>
 </html>
