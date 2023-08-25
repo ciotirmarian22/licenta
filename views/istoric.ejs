@@ -5,21 +5,10 @@
 <button id="addEventButton">Add Event</button>
 <br><br>
 
-<div>
-    <label for="eventText">Gramaj:</label>
-    <input type="text" id="eventText" name="eventText">
-    <button id="addTextButton">Insereaza</button>
-</div>
-
 <div id="calendar">
     <input type="text" id="searchBar" placeholder="Search for products">
+    <input type="number" id="eventText" placeholder="Enter numeric value">
     <ul id="searchResults"></ul>
-</div>
-
-<div id="selectedProduct">
-    <h2>Selected Product:</h2>
-    <p id="selectedProductName"></p>
-    <button id="addToDatabaseButton" disabled>Add to Database</button>
 </div>
 
 <div id="produse">
@@ -31,15 +20,15 @@
     </ul>
 </div>
 
+<div id="selectedProduct">
+    <h2>Selected Product:</h2>
+    <p id="selectedProductName"></p>
+    <button id="addToDatabaseButton" disabled>Add to Database</button>
+</div>
+
 <!-- Include the following <script> tag -->
 <script src="/js/calendar.js"></script>
-
-<!-- Define the handleSearch function -->
-<script>
-    function handleSearch(produse, searchBar) {
-        // Your handleSearch function code here...
-    }
-</script>
+<script src="/js/calorii.js"></script>
 
 <!-- Include the produse data -->
 <script>
@@ -48,9 +37,5 @@
 
 <!-- Include the search.js script -->
 <script src="/js/search.js"></script>
-
-<!-- Include the calorii.js script -->
-<script src="/js/calorii.js"></script>
-
 </body>
 </html>
