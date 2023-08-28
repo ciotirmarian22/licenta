@@ -6,7 +6,6 @@ const app = express();
 const port = 6789;
 const mysql = require('mysql2');
 
-let calorii_masa1 = 0;
 
 app.use(express.static('public'));
 //app.use('/js', express.static('js'));
@@ -104,7 +103,7 @@ app.post('/add-event-text', (req, res) => {
 app.post("/add-to-masa1", (req, res) => {
     const selectedProductId = req.body.id;
     const selectedDate = req.body.date;
-    const cantitate = parseFloat(req.body.cantitate);
+    let cantitate = parseFloat(req.body.cantitate);
 
     console.log("cantitate:", cantitate);
     // Fetch the current value of the masa1 field for the selected date
@@ -131,33 +130,50 @@ app.post("/add-to-masa1", (req, res) => {
                     console.error("Error updating user_date table:", updateErr);
                     res.status(500).send("Error updating user_date table");
                 } else {
+                    let calorii_masa1 = 0;
                     console.log("Product id added to masa1 field:", selectedProductId);
                     const fetchPretSql = `SELECT pret FROM produse WHERE id IN (${updatedMasa1})`;
-                    let totalCalorii = 0;
                     con.query(fetchPretSql, (fetchPretErr, fetchPretResult) => {
                         if (fetchPretErr) {
                             console.error("Error fetching pret values:", fetchPretErr);
                             res.status(500).send("Error fetching pret values");
                         } else {
-                            // Calculate the total based on fetched 'pret' values and eventText
                             
-                            
-                            //console.log('1111111111111');
-                            console.log('fetchPretResult:',fetchPretResult);
-                            for (const row of fetchPretResult) {
-                                //console.log('222222222222');
-                                console.log("row.pret:", row.pret);
-                                //console.log("row.pret * cantitate", row.pret * cantitate);
-                                totalCalorii += (row.pret * cantitate) / 100.0;
-                                console.log("cantitate:", cantitate);
-                                //console.log("Total calorii:", totalCalorii);
-                            }
-                            // After the loop, add the computed totalCalorii to calorii_masa1
-                            calorii_masa1 += totalCalorii;
+                            const updatedMasa1Ids = updatedMasa1.split(',');
+                            let processedCount = 0; // Counter to track processed IDs
 
-                            console.log("Total calorii:", totalCalorii);
-                            console.log("calorii masa 1:", calorii_masa1);
-                            res.status(200).json({ message: "Data received and processed successfully." });
+                            let totalCalorii = 0;
+
+                            // Loop through the updatedMasa1 IDs and fetch pret values for each ID
+                            for (const id of updatedMasa1Ids) {
+                            const fetchPretSql = `SELECT pret FROM produse WHERE id = ?`;
+                            con.query(fetchPretSql, [id], (fetchPretErr, fetchPretResult) => {
+                                if (fetchPretErr) {
+                                console.error("Error fetching pret values:", fetchPretErr);
+                                res.status(500).send("Error fetching pret values");
+                                } else {
+                                // Calculate totalCalorii for the current ID and add it to the total
+                                const row = fetchPretResult[0]; // Assuming only one row is returned
+                                const totalCaloriiForId = (row.pret * cantitate) / 100.0;
+                                totalCalorii += totalCaloriiForId;
+
+                                console.log("Total calorii for ID:", id, totalCaloriiForId);
+                                console.log("Current totalCalorii:", totalCalorii);
+
+                                processedCount++; // Increment the processed IDs count
+
+                                // Check if all IDs have been processed
+                                if (processedCount === updatedMasa1Ids.length) {
+                                    // After processing all IDs, add the computed totalCalorii to calorii_masa1
+                                    calorii_masa1 += totalCalorii;
+
+                                    console.log("Total calorii:", totalCalorii);
+                                    console.log("calorii masa 1:", calorii_masa1);
+                                    res.status(200).json({ message: "Data received and processed successfully." });
+                                }
+                                }
+                            });
+                            }
                         }
                     });
                 }
