@@ -124,60 +124,63 @@ app.post("/add-to-masa1", (req, res) => {
             }
 
             // Update the user_date table with the updatedMasa1 value
+            // Define the SQL query to update the masa1 column
             const updateSql = `UPDATE user_date SET masa1 = ? WHERE dataa = ?`;
+
+            // Execute the update query
             con.query(updateSql, [updatedMasa1, selectedDate], (updateErr, updateResult) => {
                 if (updateErr) {
                     console.error("Error updating user_date table:", updateErr);
                     res.status(500).send("Error updating user_date table");
                 } else {
-                    let calorii_masa1 = 0;
                     console.log("Product id added to masa1 field:", selectedProductId);
-                    const fetchPretSql = `SELECT pret FROM produse WHERE id IN (${updatedMasa1})`;
+
+                    // Fetch the 'pret' values from produse based on updatedMasa1
+                    const fetchPretSql = `SELECT pret FROM produse WHERE id IN (${selectedProductId})`;
                     con.query(fetchPretSql, (fetchPretErr, fetchPretResult) => {
                         if (fetchPretErr) {
                             console.error("Error fetching pret values:", fetchPretErr);
                             res.status(500).send("Error fetching pret values");
                         } else {
-                            
-                            const updatedMasa1Ids = updatedMasa1.split(',');
-                            let processedCount = 0; // Counter to track processed IDs
-
-                            let totalCalorii = 0;
-
-                            // Loop through the updatedMasa1 IDs and fetch pret values for each ID
-                            for (const id of updatedMasa1Ids) {
-                            const fetchPretSql = `SELECT pret FROM produse WHERE id = ?`;
-                            con.query(fetchPretSql, [id], (fetchPretErr, fetchPretResult) => {
-                                if (fetchPretErr) {
-                                console.error("Error fetching pret values:", fetchPretErr);
-                                res.status(500).send("Error fetching pret values");
+                            let totalCaloriiForId = 0;
+                            // Calculate the total based on fetched 'pret' values and cantitate
+                            for (const row of fetchPretResult) {
+                                totalCaloriiForId += (row.pret * cantitate) / 100.0;
+                                console.log("row.pret:",row.pret);
+                                console.log("cantitate:",cantitate);
+                            }
+                            console.log("totalCaloriiForId:", totalCaloriiForId);
+                            // Fetch the current value of calorii_masa1 from user_date
+                            const fetchCaloriiMasa1Sql = `SELECT calorii_masa1 FROM user_date WHERE dataa = ?`;
+                            con.query(fetchCaloriiMasa1Sql, [selectedDate], (fetchCaloriiErr, fetchCaloriiResult) => {
+                                if (fetchCaloriiErr) {
+                                    console.error("Error fetching calorii_masa1 value:", fetchCaloriiErr);
+                                    res.status(500).send("Error fetching calorii_masa1 value");
                                 } else {
-                                // Calculate totalCalorii for the current ID and add it to the total
-                                const row = fetchPretResult[0]; // Assuming only one row is returned
-                                const totalCaloriiForId = (row.pret * cantitate) / 100.0;
-                                totalCalorii += totalCaloriiForId;
+                                    let calorii_masa1 = fetchCaloriiResult[0].calorii_masa1;
 
-                                console.log("Total calorii for ID:", id, totalCaloriiForId);
-                                console.log("Current totalCalorii:", totalCalorii);
+                                    console.log("calorii_masa1:", calorii_masa1);
+                                    // Update calorii_masa1 with the new value
+                                    calorii_masa1 += totalCaloriiForId;
 
-                                processedCount++; // Increment the processed IDs count
-
-                                // Check if all IDs have been processed
-                                if (processedCount === updatedMasa1Ids.length) {
-                                    // After processing all IDs, add the computed totalCalorii to calorii_masa1
-                                    calorii_masa1 += totalCalorii;
-
-                                    console.log("Total calorii:", totalCalorii);
-                                    console.log("calorii masa 1:", calorii_masa1);
-                                    res.status(200).json({ message: "Data received and processed successfully." });
-                                }
+                                    // Update the user_date table with the updated calorii_masa1 value
+                                    const updateCaloriiMasa1Sql = `UPDATE user_date SET calorii_masa1 = ? WHERE dataa = ?`;
+                                    con.query(updateCaloriiMasa1Sql, [calorii_masa1, selectedDate], (updateCaloriiErr, updateCaloriiResult) => {
+                                        if (updateCaloriiErr) {
+                                            console.error("Error updating calorii_masa1:", updateCaloriiErr);
+                                            res.status(500).send("Error updating calorii_masa1");
+                                        } else {
+                                            console.log("calorii_masa1 updated:", calorii_masa1);
+                                            res.status(200).json({ message: "Data received and processed successfully." });
+                                        }
+                                    });
                                 }
                             });
-                            }
                         }
-                    });
-                }
-            });
+        });
+    }
+});
+
         }
     });
 });
