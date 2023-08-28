@@ -6,6 +6,8 @@ const app = express();
 const port = 6789;
 const mysql = require('mysql2');
 
+let calorii_masa1 = 0;
+
 app.use(express.static('public'));
 //app.use('/js', express.static('js'));
 
@@ -102,9 +104,9 @@ app.post('/add-event-text', (req, res) => {
 app.post("/add-to-masa1", (req, res) => {
     const selectedProductId = req.body.id;
     const selectedDate = req.body.date;
-    const calorii = req.body.calorii;
+    const cantitate = parseFloat(req.body.cantitate);
 
-    console.log("calorii:", calorii);
+    console.log("cantitate:", cantitate);
     // Fetch the current value of the masa1 field for the selected date
     const fetchSql = `SELECT masa1 FROM user_date WHERE dataa = ?`;
     con.query(fetchSql, [selectedDate], (fetchErr, fetchResult) => {
@@ -130,7 +132,34 @@ app.post("/add-to-masa1", (req, res) => {
                     res.status(500).send("Error updating user_date table");
                 } else {
                     console.log("Product id added to masa1 field:", selectedProductId);
-                    res.status(200).send("Product id added to masa1 field");
+                    const fetchPretSql = `SELECT pret FROM produse WHERE id IN (${updatedMasa1})`;
+                    let totalCalorii = 0;
+                    con.query(fetchPretSql, (fetchPretErr, fetchPretResult) => {
+                        if (fetchPretErr) {
+                            console.error("Error fetching pret values:", fetchPretErr);
+                            res.status(500).send("Error fetching pret values");
+                        } else {
+                            // Calculate the total based on fetched 'pret' values and eventText
+                            
+                            
+                            //console.log('1111111111111');
+                            console.log('fetchPretResult:',fetchPretResult);
+                            for (const row of fetchPretResult) {
+                                //console.log('222222222222');
+                                console.log("row.pret:", row.pret);
+                                //console.log("row.pret * cantitate", row.pret * cantitate);
+                                totalCalorii += (row.pret * cantitate) / 100.0;
+                                console.log("cantitate:", cantitate);
+                                //console.log("Total calorii:", totalCalorii);
+                            }
+                            // After the loop, add the computed totalCalorii to calorii_masa1
+                            calorii_masa1 += totalCalorii;
+
+                            console.log("Total calorii:", totalCalorii);
+                            console.log("calorii masa 1:", calorii_masa1);
+                            res.status(200).json({ message: "Data received and processed successfully." });
+                        }
+                    });
                 }
             });
         }
