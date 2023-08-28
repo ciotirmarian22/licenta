@@ -57,6 +57,9 @@ function handleSearch(produse, searchBar) {
     
             // Get the selected date from the input field
             const selectedDate = document.getElementById("data").value;
+
+            const eventTextInput = document.getElementById("eventText");
+            const eventText = eventTextInput.value;
     
             // Here, you can send the selected product's id and selected date to the server to add it to the database
             // For example, using the Fetch API or XMLHttpRequest
@@ -68,14 +71,15 @@ function handleSearch(produse, searchBar) {
     
             const data = {
                 id: selectedProductId,
-                date: selectedDate
+                date: selectedDate,
+                cantitate: eventText
             };
     
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
                     if (xhr.status === 200) {
                         // Database operation successful
-                        console.log("Product id added to masa1 field:", selectedProductId);
+                        console.log("Product id added to masa1 field - check:", selectedProductId);
                     } else {
                         // Handle error
                         console.error("Error adding product id to masa1 field:", xhr.status);

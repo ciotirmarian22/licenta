@@ -102,7 +102,9 @@ app.post('/add-event-text', (req, res) => {
 app.post("/add-to-masa1", (req, res) => {
     const selectedProductId = req.body.id;
     const selectedDate = req.body.date;
+    const calorii = req.body.calorii;
 
+    console.log("calorii:", calorii);
     // Fetch the current value of the masa1 field for the selected date
     const fetchSql = `SELECT masa1 FROM user_date WHERE dataa = ?`;
     con.query(fetchSql, [selectedDate], (fetchErr, fetchResult) => {
