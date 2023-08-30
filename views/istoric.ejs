@@ -8,7 +8,7 @@
 <h1>istoric</h1>
 
 <!-- Display the selected date -->
-<p id="selectedDateDisplay">Selected Date: <%= selectedDate %></p>
+<p id="selectedDateDisplay">Data selectata: <%= selectedDate %></p>
 
 <% if (userData) { %>
 <!-- Display the fetched data -->
@@ -18,6 +18,7 @@
 <p>Calorii Masa 2: <%= userData.calorii_masa2 %></p>
 <p>Masa 3: <%= userData.masa3 %></p>
 <p>Calorii Masa 3: <%= userData.calorii_masa3 %></p>
+<p>Calorii consumate: <%= userData.calorii_masa1 + userData.calorii_masa2 + userData.calorii_masa3 %></p>
 <% } else { %>
 <p>No data available for the selected date.</p>
 <% } %>

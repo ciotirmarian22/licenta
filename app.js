@@ -46,17 +46,67 @@ app.get('/', (req, res) => {
         if (err) throw err;
         const produse = result;
 
+        let templateName = 'index';
+
         if (req.cookies.tipUtilizator === "administrator") {
-            // Afișați conținut specific pentru administrator
-            res.render('index_admin', { produse: produse });
-        } else {
-            // Afișați conținut specific pentru utilizator normal
-            res.render('index_normal', { produse: produse });
+            templateName = 'index_admin';
         }
+        else if (req.cookies.tipUtilizator === "normal") {
+            templateName = 'index_normal';
+        }
+
+        res.render(templateName, { produse: produse });
     });
 });
 
 
+app.get('/autentificare', (req, res) => {
+    eroare="";
+    mesaj="";
+    res.clearCookie("utilizator");
+    if(req.cookies.mesajEroare){
+        eroare = req.cookies.mesajEroare;
+        res.clearCookie("mesajEroare");
+    }
+
+    res.render('autentificare.ejs',{mesajEroare:eroare});
+});
+
+app.post('/verificare-autentificare', (req, res) => {
+    console.log(req.body);
+
+    var ok = 0;
+    var name = "";
+
+    for(var i =0; i < _utilizatori.length; i++){
+        if(req.body.user == _utilizatori[i].utilizator && req.body.pass == _utilizatori[i].pass){
+            ok = 1;
+            name = _utilizatori[i].utilizator;
+            break;
+        }
+        else{
+            ok = 0;
+        }
+    }
+
+    if(ok==1){
+        res.cookie('utilizator', name);
+        res.cookie('tipUtilizator', _utilizatori[i].tip); // Adăugați acest rând
+        console.log(_utilizatori[i].tip);
+        res.redirect("http://localhost:6789");
+    }
+    else{
+        res.cookie('mesajEroare','Date invalide!');
+        res.redirect("http://localhost:6789/autentificare");
+    }
+});
+
+app.get('/logout', (req, res) => {
+    res.clearCookie('utilizator');
+    res.clearCookie('tipUtilizator');
+    // Redirect the user to the desired page after logging out
+    res.redirect('/');
+});
 
 app.post('/save-selected-date', (req, res) => {
     const selectedDate = req.body.selectedDate;
@@ -94,13 +144,7 @@ app.get('/adaugare_masa', (req, res) => {
     });
 });
 
-app.post('/save-selected-date-2', (req, res) => {
-    const selectedDate = req.body.selectedDate;
-    console.log("Received selectedDate:", selectedDate);
 
-    // Here you can process the selectedDate and send a response back to the client
-
-});
 
 app.get('/istoric', (req, res) => {
     const selectedDate = req.query.selectedDate; // Get the selected date from the query string
@@ -428,48 +472,7 @@ app.get('/home',(req,res) => {
     res.redirect("http://localhost:6789");
 });
 
-app.get('/autentificare', (req, res) => {
-    eroare="";
-    mesaj="";
-    res.clearCookie("utilizator");
-    if(req.cookies.mesajEroare){
-        eroare = req.cookies.mesajEroare;
-        res.clearCookie("mesajEroare");
-    }
 
-    res.render('autentificare.ejs',{mesajEroare:eroare});
-});
-
-app.post('/verificare-autentificare', (req, res) => {
-    console.log(req.body);
-
-    var ok = 0;
-    var name = "";
-
-    for(var i =0; i < _utilizatori.length; i++){
-        if(req.body.user == _utilizatori[i].utilizator && req.body.pass == _utilizatori[i].pass){
-            ok = 1;
-            name = _utilizatori[i].utilizator;
-            break;
-        }
-        else{
-            ok = 0;
-        }
-    }
-
-    if(ok==1){
-        res.cookie('utilizator', name);
-        res.cookie('tipUtilizator', _utilizatori[i].tip); // Adăugați acest rând
-        console.log(_utilizatori[i].tip);
-        res.redirect("http://localhost:6789");
-    }
-    else{
-        res.cookie('mesajEroare','Date invalide!');
-        res.redirect("http://localhost:6789/autentificare");
-    }
-});
-
-//laborator 12
 
 app.get('/creare-BD', (req,res) => {
     con.connect(function(err) {
