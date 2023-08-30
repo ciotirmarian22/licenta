@@ -12,12 +12,28 @@
 
 <% if (userData) { %>
 <!-- Display the fetched data -->
-<p>Masa 1: <%= userData.masa1 %></p>
+<p>Masa 1:</p>
+<ul>
+    <% for (const masa1Product of masa1Products) { %>
+    <li><%= masa1Product.name %></li>
+    <% } %>
+</ul>
 <p>Calorii Masa 1: <%= userData.calorii_masa1 %></p>
 
-<p>Masa 2: <%= userData.masa2 %></p>
+<p>Masa 2:</p>
+<ul>
+    <% for (const masa2Product of masa2Products) { %>
+    <li><%= masa2Product.name %></li>
+    <% } %>
+</ul>
 <p>Calorii Masa 2: <%= userData.calorii_masa2 %></p>
-<p>Masa 3: <%= userData.masa3 %></p>
+
+<p>Masa 3:</p>
+<ul>
+    <% for (const masa3Product of masa3Products) { %>
+    <li><%= masa3Product.name %></li>
+    <% } %>
+</ul>
 <p>Calorii Masa 3: <%= userData.calorii_masa3 %></p>
 <p>Calorii consumate: <%= userData.calorii_masa1 + userData.calorii_masa2 + userData.calorii_masa3 %></p>
 <% } else { %>
