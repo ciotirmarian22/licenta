@@ -60,13 +60,17 @@ function handleSearch(produse, searchBar) {
 
             const eventTextInput = document.getElementById("eventText");
             const eventText = eventTextInput.value;
+
+            // Get the selected value from the masaSelect dropdown
+            const masaSelect = document.getElementById("masaSelect");
+            const selectedMasa = masaSelect.value;
     
             // Here, you can send the selected product's id and selected date to the server to add it to the database
             // For example, using the Fetch API or XMLHttpRequest
     
             // Make an AJAX request to add the selected product's id to the database
             const xhr = new XMLHttpRequest();
-            xhr.open("POST", "/add-to-masa1", true);
+            xhr.open("POST", `/add-to-${selectedMasa}`, true);
             xhr.setRequestHeader("Content-Type", "application/json");
     
             const data = {

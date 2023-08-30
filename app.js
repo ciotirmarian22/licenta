@@ -80,7 +80,7 @@ app.post('/save-selected-date', (req, res) => {
 
 
 
-app.get('/istoric', (req, res) => {
+app.get('/adaugare_masa', (req, res) => {
     con.query("SELECT * FROM produse", function (err, produseResult, fields) {
         if (err) throw err;
         const produse = produseResult;
@@ -89,10 +89,34 @@ app.get('/istoric', (req, res) => {
             if (err) throw err;
             const userData = userDataResult;
             
-            res.render('istoric', { produse: produse, userData: userData });
+            res.render('adaugare_masa', { produse: produse, userData: userData });
         });
     });
 });
+
+app.get('/istoric', (req, res) => {
+    res.render('istoric');
+});
+
+app.post('/save-selected-date-2', (req, res) => {
+    const selectedDate = req.body.selectedDate;
+    console.log("Received selectedDate:", selectedDate);
+
+    // Fetch the data from the user_date table based on the selected date
+    const fetchDataSql = `SELECT masa1, calorii_masa1, masa2, calorii_masa2, masa3, calorii_masa3 FROM user_date WHERE dataa = ?`;
+    con.query(fetchDataSql, [selectedDate], (fetchErr, fetchResult) => {
+        if (fetchErr) {
+            console.error("Error fetching data from user_date table:", fetchErr);
+            res.status(500).send("Error fetching data from user_date table");
+        } else {
+            const userData = fetchResult[0];
+            
+            // Render the 'istoric.ejs' template with the fetched data
+            res.render('istoric', { userData: userData });
+        }
+    });
+});
+
 
 app.post('/add-event-text', (req, res) => {
     const eventText = req.body.eventText;
@@ -185,6 +209,175 @@ app.post("/add-to-masa1", (req, res) => {
     });
 });
 
+app.post("/add-to-masa2", (req, res) => {
+    const selectedProductId = req.body.id;
+    const selectedDate = req.body.date;
+    let cantitate = parseFloat(req.body.cantitate);
+
+    console.log("cantitate:", cantitate);
+    // Fetch the current value of the masa2 field for the selected date
+    const fetchSql = `SELECT masa2 FROM user_date WHERE dataa = ?`;
+    con.query(fetchSql, [selectedDate], (fetchErr, fetchResult) => {
+        if (fetchErr) {
+            console.error("Error fetching masa2 value:", fetchErr);
+            res.status(500).send("Error fetching masa2 value");
+        } else {
+            const currentMasa2 = fetchResult[0].masa2;
+            let updatedMasa2 = currentMasa2;
+
+            // Check if the currentMasa1 is not empty
+            if (currentMasa2) {
+                updatedMasa2 += `,${selectedProductId}`;
+            } else {
+                updatedMasa2 = selectedProductId.toString();
+            }
+
+            // Update the user_date table with the updatedMasa1 value
+            // Define the SQL query to update the masa1 column
+            const updateSql = `UPDATE user_date SET masa2 = ? WHERE dataa = ?`;
+
+            // Execute the update query
+            con.query(updateSql, [updatedMasa2, selectedDate], (updateErr, updateResult) => {
+                if (updateErr) {
+                    console.error("Error updating user_date table:", updateErr);
+                    res.status(500).send("Error updating user_date table");
+                } else {
+                    console.log("Product id added to masa2 field:", selectedProductId);
+
+                    // Fetch the 'pret' values from produse based on updatedMasa1
+                    const fetchPretSql = `SELECT pret FROM produse WHERE id IN (${selectedProductId})`;
+                    con.query(fetchPretSql, (fetchPretErr, fetchPretResult) => {
+                        if (fetchPretErr) {
+                            console.error("Error fetching pret values:", fetchPretErr);
+                            res.status(500).send("Error fetching pret values");
+                        } else {
+                            let totalCaloriiForId = 0;
+                            // Calculate the total based on fetched 'pret' values and cantitate
+                            for (const row of fetchPretResult) {
+                                totalCaloriiForId += (row.pret * cantitate) / 100.0;
+                                console.log("row.pret:",row.pret);
+                                console.log("cantitate:",cantitate);
+                            }
+                            console.log("totalCaloriiForId:", totalCaloriiForId);
+                            // Fetch the current value of calorii_masa1 from user_date
+                            const fetchCaloriiMasa2Sql = `SELECT calorii_masa2 FROM user_date WHERE dataa = ?`;
+                            con.query(fetchCaloriiMasa2Sql, [selectedDate], (fetchCaloriiErr, fetchCaloriiResult) => {
+                                if (fetchCaloriiErr) {
+                                    console.error("Error fetching calorii_masa2 value:", fetchCaloriiErr);
+                                    res.status(500).send("Error fetching calorii_masa2 value");
+                                } else {
+                                    let calorii_masa2 = fetchCaloriiResult[0].calorii_masa2;
+
+                                    console.log("calorii_masa2:", calorii_masa2);
+                                    // Update calorii_masa1 with the new value
+                                    calorii_masa2 += totalCaloriiForId;
+
+                                    // Update the user_date table with the updated calorii_masa1 value
+                                    const updateCaloriiMasa2Sql = `UPDATE user_date SET calorii_masa2 = ? WHERE dataa = ?`;
+                                    con.query(updateCaloriiMasa2Sql, [calorii_masa2, selectedDate], (updateCaloriiErr, updateCaloriiResult) => {
+                                        if (updateCaloriiErr) {
+                                            console.error("Error updating calorii_masa2:", updateCaloriiErr);
+                                            res.status(500).send("Error updating calorii_masa2");
+                                        } else {
+                                            console.log("calorii_masa2 updated:", calorii_masa2);
+                                            res.status(200).json({ message: "Data received and processed successfully." });
+                                        }
+                                    });
+                                }
+                            });
+                        }
+        });
+    }
+});
+
+        }
+    });
+});
+
+app.post("/add-to-masa3", (req, res) => {
+    const selectedProductId = req.body.id;
+    const selectedDate = req.body.date;
+    let cantitate = parseFloat(req.body.cantitate);
+
+    console.log("cantitate:", cantitate);
+    // Fetch the current value of the masa3 field for the selected date
+    const fetchSql = `SELECT masa3 FROM user_date WHERE dataa = ?`;
+    con.query(fetchSql, [selectedDate], (fetchErr, fetchResult) => {
+        if (fetchErr) {
+            console.error("Error fetching masa3 value:", fetchErr);
+            res.status(500).send("Error fetching masa3 value");
+        } else {
+            const currentmasa3 = fetchResult[0].masa3;
+            let updatedmasa3 = currentmasa3;
+
+            // Check if the currentmasa3 is not empty
+            if (currentmasa3) {
+                updatedmasa3 += `,${selectedProductId}`;
+            } else {
+                updatedmasa3 = selectedProductId.toString();
+            }
+
+            // Update the user_date table with the updatedmasa3 value
+            // Define the SQL query to update the masa3 column
+            const updateSql = `UPDATE user_date SET masa3 = ? WHERE dataa = ?`;
+
+            // Execute the update query
+            con.query(updateSql, [updatedmasa3, selectedDate], (updateErr, updateResult) => {
+                if (updateErr) {
+                    console.error("Error updating user_date table:", updateErr);
+                    res.status(500).send("Error updating user_date table");
+                } else {
+                    console.log("Product id added to masa3 field:", selectedProductId);
+
+                    // Fetch the 'pret' values from produse based on updatedmasa3
+                    const fetchPretSql = `SELECT pret FROM produse WHERE id IN (${selectedProductId})`;
+                    con.query(fetchPretSql, (fetchPretErr, fetchPretResult) => {
+                        if (fetchPretErr) {
+                            console.error("Error fetching pret values:", fetchPretErr);
+                            res.status(500).send("Error fetching pret values");
+                        } else {
+                            let totalCaloriiForId = 0;
+                            // Calculate the total based on fetched 'pret' values and cantitate
+                            for (const row of fetchPretResult) {
+                                totalCaloriiForId += (row.pret * cantitate) / 100.0;
+                                console.log("row.pret:",row.pret);
+                                console.log("cantitate:",cantitate);
+                            }
+                            console.log("totalCaloriiForId:", totalCaloriiForId);
+                            // Fetch the current value of calorii_masa3 from user_date
+                            const fetchCaloriimasa3Sql = `SELECT calorii_masa3 FROM user_date WHERE dataa = ?`;
+                            con.query(fetchCaloriimasa3Sql, [selectedDate], (fetchCaloriiErr, fetchCaloriiResult) => {
+                                if (fetchCaloriiErr) {
+                                    console.error("Error fetching calorii_masa3 value:", fetchCaloriiErr);
+                                    res.status(500).send("Error fetching calorii_masa3 value");
+                                } else {
+                                    let calorii_masa3 = fetchCaloriiResult[0].calorii_masa3;
+
+                                    console.log("calorii_masa3:", calorii_masa3);
+                                    // Update calorii_masa3 with the new value
+                                    calorii_masa3 += totalCaloriiForId;
+
+                                    // Update the user_date table with the updated calorii_masa3 value
+                                    const updateCaloriimasa3Sql = `UPDATE user_date SET calorii_masa3 = ? WHERE dataa = ?`;
+                                    con.query(updateCaloriimasa3Sql, [calorii_masa3, selectedDate], (updateCaloriiErr, updateCaloriiResult) => {
+                                        if (updateCaloriiErr) {
+                                            console.error("Error updating calorii_masa3:", updateCaloriiErr);
+                                            res.status(500).send("Error updating calorii_masa3");
+                                        } else {
+                                            console.log("calorii_masa3 updated:", calorii_masa3);
+                                            res.status(200).json({ message: "Data received and processed successfully." });
+                                        }
+                                    });
+                                }
+                            });
+                        }
+        });
+    }
+});
+
+        }
+    });
+});
 
 var mesaj="";
 app.get('/', (req, res) => {
