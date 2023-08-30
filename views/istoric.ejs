@@ -1,41 +1,31 @@
 <%- contentFor('body') %>
 
-<label for="data">Data:</label>
-<input class="culoare" type="date" id="data" name="data">
-<button id="addEventButton">Add Event</button>
+<label for="data2">Data:</label>
+<input class="culoare" type="date" id="data2" name="data">
+<button id="addEventButton2">Selecteaza data</button>
 <br><br>
 
-<div id="calendar">
-    <input type="text" id="searchBar" placeholder="Search for products">
-    <input type="number" id="eventText" placeholder="Enter numeric value">
-    <ul id="searchResults"></ul>
-</div>
+<h1>istoric</h1>
 
-<div id="produse">
-    <h1>Masa1</h1>
-    <ul>
-        <% for (var i = 0; i < userData.length; i++) { %>
-        <li><%= userData[i].dataa %> - <%= userData[i].masa1 %> - <%= userData[i].calorii_masa1 %></li>
-        <% } %>
-    </ul>
-</div>
+<!-- Display the selected date -->
+<p id="selectedDateDisplay">Selected Date: <%= selectedDate %></p>
 
-<div id="selectedProduct">
-    <h2>Selected Product:</h2>
-    <p id="selectedProductName"></p>
-    <button id="addToDatabaseButton" disabled>Add to Database</button>
-</div>
+<% if (userData) { %>
+<!-- Display the fetched data -->
+<p>Masa 1: <%= userData.masa1 %></p>
+<p>Calorii Masa 1: <%= userData.calorii_masa1 %></p>
+<p>Masa 2: <%= userData.masa2 %></p>
+<p>Calorii Masa 2: <%= userData.calorii_masa2 %></p>
+<p>Masa 3: <%= userData.masa3 %></p>
+<p>Calorii Masa 3: <%= userData.calorii_masa3 %></p>
+<% } else { %>
+<p>No data available for the selected date.</p>
+<% } %>
 
-<!-- Include the following <script> tag -->
-<script src="/js/calendar.js"></script>
-<script src="/js/calorii.js"></script>
 
-<!-- Include the produse data -->
-<script>
-    const produse = <%- JSON.stringify(produse) %>;
-</script>
 
-<!-- Include the search.js script -->
-<script src="/js/search.js"></script>
+
+<script src="/js/calendar_istoric.js"></script>
+
 </body>
 </html>

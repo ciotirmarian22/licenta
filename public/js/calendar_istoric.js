@@ -1,6 +1,6 @@
 // Get references to the HTML elements
-const dataInput = document.getElementById("data");
-const addEventButton = document.getElementById("addEventButton");
+const dataInput = document.getElementById("data2");
+const addEventButton = document.getElementById("addEventButton2");
 
 // Add event listener to the button
 addEventButton.addEventListener("click", function () {
@@ -10,7 +10,9 @@ addEventButton.addEventListener("click", function () {
     // Use the selected date in your JavaScript code
     console.log("Selected Date:", selectedDate);
 
-    fetch('/save-selected-date', {
+    window.location.href = `/istoric?selectedDate=${selectedDate}`;
+
+    fetch('/save-selected-date-2', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -25,5 +27,3 @@ addEventButton.addEventListener("click", function () {
         console.error("Error:", error);
     });
 });
-
-

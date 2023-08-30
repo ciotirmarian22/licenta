@@ -42,7 +42,7 @@ app.use('/css', express.static('css'));
 //app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-    con.query("SELECT * FROM produse", function (err, result, fields) {
+    con.query("SELECT * FROM produse;", function (err, result, fields) {
         if (err) throw err;
         const produse = result;
 
@@ -64,7 +64,7 @@ app.post('/save-selected-date', (req, res) => {
 
     // Here you can process the selectedDate and send a response back to the client
 
-    const sql = `INSERT INTO user_date (dataa) VALUES (?)`;
+    const sql = `INSERT INTO user_date (dataa) VALUES (?);`;
     con.query(sql, selectedDate, (err, result) => {
         if (err) {
             console.error("Error inserting into user_date table:", err);
@@ -94,28 +94,33 @@ app.get('/adaugare_masa', (req, res) => {
     });
 });
 
-app.get('/istoric', (req, res) => {
-    res.render('istoric');
-});
-
 app.post('/save-selected-date-2', (req, res) => {
     const selectedDate = req.body.selectedDate;
     console.log("Received selectedDate:", selectedDate);
 
+    // Here you can process the selectedDate and send a response back to the client
+
+});
+
+app.get('/istoric', (req, res) => {
+    const selectedDate = req.query.selectedDate; // Get the selected date from the query string
+    console.log("selectedDate:", selectedDate);
     // Fetch the data from the user_date table based on the selected date
-    const fetchDataSql = `SELECT masa1, calorii_masa1, masa2, calorii_masa2, masa3, calorii_masa3 FROM user_date WHERE dataa = ?`;
+    const fetchDataSql = 'SELECT masa1, calorii_masa1, masa2, calorii_masa2, masa3, calorii_masa3 FROM user_date WHERE dataa = ?;';
     con.query(fetchDataSql, [selectedDate], (fetchErr, fetchResult) => {
         if (fetchErr) {
             console.error("Error fetching data from user_date table:", fetchErr);
             res.status(500).send("Error fetching data from user_date table");
         } else {
             const userData = fetchResult[0];
-            
-            // Render the 'istoric.ejs' template with the fetched data
-            res.render('istoric', { userData: userData });
+
+            // Render the 'istoric.ejs' template with the fetched data and selectedDate
+            res.render('istoric', { userData: userData, selectedDate: selectedDate });
         }
     });
 });
+
+
 
 
 app.post('/add-event-text', (req, res) => {
@@ -131,7 +136,7 @@ app.post("/add-to-masa1", (req, res) => {
 
     console.log("cantitate:", cantitate);
     // Fetch the current value of the masa1 field for the selected date
-    const fetchSql = `SELECT masa1 FROM user_date WHERE dataa = ?`;
+    const fetchSql = `SELECT masa1 FROM user_date WHERE dataa = ?;`;
     con.query(fetchSql, [selectedDate], (fetchErr, fetchResult) => {
         if (fetchErr) {
             console.error("Error fetching masa1 value:", fetchErr);
@@ -149,7 +154,7 @@ app.post("/add-to-masa1", (req, res) => {
 
             // Update the user_date table with the updatedMasa1 value
             // Define the SQL query to update the masa1 column
-            const updateSql = `UPDATE user_date SET masa1 = ? WHERE dataa = ?`;
+            const updateSql = `UPDATE user_date SET masa1 = ? WHERE dataa = ?;`;
 
             // Execute the update query
             con.query(updateSql, [updatedMasa1, selectedDate], (updateErr, updateResult) => {
@@ -160,7 +165,7 @@ app.post("/add-to-masa1", (req, res) => {
                     console.log("Product id added to masa1 field:", selectedProductId);
 
                     // Fetch the 'pret' values from produse based on updatedMasa1
-                    const fetchPretSql = `SELECT pret FROM produse WHERE id IN (${selectedProductId})`;
+                    const fetchPretSql = `SELECT pret FROM produse WHERE id IN (${selectedProductId});`;
                     con.query(fetchPretSql, (fetchPretErr, fetchPretResult) => {
                         if (fetchPretErr) {
                             console.error("Error fetching pret values:", fetchPretErr);
@@ -175,7 +180,7 @@ app.post("/add-to-masa1", (req, res) => {
                             }
                             console.log("totalCaloriiForId:", totalCaloriiForId);
                             // Fetch the current value of calorii_masa1 from user_date
-                            const fetchCaloriiMasa1Sql = `SELECT calorii_masa1 FROM user_date WHERE dataa = ?`;
+                            const fetchCaloriiMasa1Sql = `SELECT calorii_masa1 FROM user_date WHERE dataa = ?;`;
                             con.query(fetchCaloriiMasa1Sql, [selectedDate], (fetchCaloriiErr, fetchCaloriiResult) => {
                                 if (fetchCaloriiErr) {
                                     console.error("Error fetching calorii_masa1 value:", fetchCaloriiErr);
@@ -188,7 +193,7 @@ app.post("/add-to-masa1", (req, res) => {
                                     calorii_masa1 += totalCaloriiForId;
 
                                     // Update the user_date table with the updated calorii_masa1 value
-                                    const updateCaloriiMasa1Sql = `UPDATE user_date SET calorii_masa1 = ? WHERE dataa = ?`;
+                                    const updateCaloriiMasa1Sql = `UPDATE user_date SET calorii_masa1 = ? WHERE dataa = ?;`;
                                     con.query(updateCaloriiMasa1Sql, [calorii_masa1, selectedDate], (updateCaloriiErr, updateCaloriiResult) => {
                                         if (updateCaloriiErr) {
                                             console.error("Error updating calorii_masa1:", updateCaloriiErr);
@@ -216,7 +221,7 @@ app.post("/add-to-masa2", (req, res) => {
 
     console.log("cantitate:", cantitate);
     // Fetch the current value of the masa2 field for the selected date
-    const fetchSql = `SELECT masa2 FROM user_date WHERE dataa = ?`;
+    const fetchSql = `SELECT masa2 FROM user_date WHERE dataa = ?;`;
     con.query(fetchSql, [selectedDate], (fetchErr, fetchResult) => {
         if (fetchErr) {
             console.error("Error fetching masa2 value:", fetchErr);
@@ -234,7 +239,7 @@ app.post("/add-to-masa2", (req, res) => {
 
             // Update the user_date table with the updatedMasa1 value
             // Define the SQL query to update the masa1 column
-            const updateSql = `UPDATE user_date SET masa2 = ? WHERE dataa = ?`;
+            const updateSql = `UPDATE user_date SET masa2 = ? WHERE dataa = ?;`;
 
             // Execute the update query
             con.query(updateSql, [updatedMasa2, selectedDate], (updateErr, updateResult) => {
@@ -245,7 +250,7 @@ app.post("/add-to-masa2", (req, res) => {
                     console.log("Product id added to masa2 field:", selectedProductId);
 
                     // Fetch the 'pret' values from produse based on updatedMasa1
-                    const fetchPretSql = `SELECT pret FROM produse WHERE id IN (${selectedProductId})`;
+                    const fetchPretSql = `SELECT pret FROM produse WHERE id IN (${selectedProductId});`;
                     con.query(fetchPretSql, (fetchPretErr, fetchPretResult) => {
                         if (fetchPretErr) {
                             console.error("Error fetching pret values:", fetchPretErr);
@@ -260,7 +265,7 @@ app.post("/add-to-masa2", (req, res) => {
                             }
                             console.log("totalCaloriiForId:", totalCaloriiForId);
                             // Fetch the current value of calorii_masa1 from user_date
-                            const fetchCaloriiMasa2Sql = `SELECT calorii_masa2 FROM user_date WHERE dataa = ?`;
+                            const fetchCaloriiMasa2Sql = `SELECT calorii_masa2 FROM user_date WHERE dataa = ?;`;
                             con.query(fetchCaloriiMasa2Sql, [selectedDate], (fetchCaloriiErr, fetchCaloriiResult) => {
                                 if (fetchCaloriiErr) {
                                     console.error("Error fetching calorii_masa2 value:", fetchCaloriiErr);
@@ -273,7 +278,7 @@ app.post("/add-to-masa2", (req, res) => {
                                     calorii_masa2 += totalCaloriiForId;
 
                                     // Update the user_date table with the updated calorii_masa1 value
-                                    const updateCaloriiMasa2Sql = `UPDATE user_date SET calorii_masa2 = ? WHERE dataa = ?`;
+                                    const updateCaloriiMasa2Sql = `UPDATE user_date SET calorii_masa2 = ? WHERE dataa = ?;`;
                                     con.query(updateCaloriiMasa2Sql, [calorii_masa2, selectedDate], (updateCaloriiErr, updateCaloriiResult) => {
                                         if (updateCaloriiErr) {
                                             console.error("Error updating calorii_masa2:", updateCaloriiErr);
@@ -301,7 +306,7 @@ app.post("/add-to-masa3", (req, res) => {
 
     console.log("cantitate:", cantitate);
     // Fetch the current value of the masa3 field for the selected date
-    const fetchSql = `SELECT masa3 FROM user_date WHERE dataa = ?`;
+    const fetchSql = `SELECT masa3 FROM user_date WHERE dataa = ?;`;
     con.query(fetchSql, [selectedDate], (fetchErr, fetchResult) => {
         if (fetchErr) {
             console.error("Error fetching masa3 value:", fetchErr);
@@ -319,7 +324,7 @@ app.post("/add-to-masa3", (req, res) => {
 
             // Update the user_date table with the updatedmasa3 value
             // Define the SQL query to update the masa3 column
-            const updateSql = `UPDATE user_date SET masa3 = ? WHERE dataa = ?`;
+            const updateSql = `UPDATE user_date SET masa3 = ? WHERE dataa = ?;`;
 
             // Execute the update query
             con.query(updateSql, [updatedmasa3, selectedDate], (updateErr, updateResult) => {
@@ -330,7 +335,7 @@ app.post("/add-to-masa3", (req, res) => {
                     console.log("Product id added to masa3 field:", selectedProductId);
 
                     // Fetch the 'pret' values from produse based on updatedmasa3
-                    const fetchPretSql = `SELECT pret FROM produse WHERE id IN (${selectedProductId})`;
+                    const fetchPretSql = `SELECT pret FROM produse WHERE id IN (${selectedProductId});`;
                     con.query(fetchPretSql, (fetchPretErr, fetchPretResult) => {
                         if (fetchPretErr) {
                             console.error("Error fetching pret values:", fetchPretErr);
@@ -345,7 +350,7 @@ app.post("/add-to-masa3", (req, res) => {
                             }
                             console.log("totalCaloriiForId:", totalCaloriiForId);
                             // Fetch the current value of calorii_masa3 from user_date
-                            const fetchCaloriimasa3Sql = `SELECT calorii_masa3 FROM user_date WHERE dataa = ?`;
+                            const fetchCaloriimasa3Sql = `SELECT calorii_masa3 FROM user_date WHERE dataa = ?;`;
                             con.query(fetchCaloriimasa3Sql, [selectedDate], (fetchCaloriiErr, fetchCaloriiResult) => {
                                 if (fetchCaloriiErr) {
                                     console.error("Error fetching calorii_masa3 value:", fetchCaloriiErr);
@@ -358,7 +363,7 @@ app.post("/add-to-masa3", (req, res) => {
                                     calorii_masa3 += totalCaloriiForId;
 
                                     // Update the user_date table with the updated calorii_masa3 value
-                                    const updateCaloriimasa3Sql = `UPDATE user_date SET calorii_masa3 = ? WHERE dataa = ?`;
+                                    const updateCaloriimasa3Sql = `UPDATE user_date SET calorii_masa3 = ? WHERE dataa = ?;`;
                                     con.query(updateCaloriimasa3Sql, [calorii_masa3, selectedDate], (updateCaloriiErr, updateCaloriiResult) => {
                                         if (updateCaloriiErr) {
                                             console.error("Error updating calorii_masa3:", updateCaloriiErr);
