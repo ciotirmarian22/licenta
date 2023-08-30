@@ -157,7 +157,60 @@ app.get('/istoric', (req, res) => {
             res.status(500).send("Error fetching data from user_date table");
         } else {
             const userData = fetchResult[0];
-
+            //console.log('fetchResult', fetchResult);
+            //console.log('fetchResult[0]',fetchResult[0]);
+            if(userData){
+                const masa1Ids = "0";
+                const masa2Ids = "0";
+                const masa3Ids = "0";
+                //console.log('userData.masa1:',userData.masa1);
+                if(userData.masa1){
+                const masa1Ids = userData.masa1.split(',');
+                console.log("masa1Ids:",masa1Ids);
+                }
+                if(userData.masa2){
+                    const masa2Ids = userData.masa2.split(',');
+                    console.log("masa2Ids:",masa2Ids);
+                    }
+                if(userData.masa3){
+                    const masa3Ids = userData.masa3.split(',');
+                    console.log("masa3Ids",masa3Ids);
+                    }
+                    const fetchMasa1ProductsSql = 'SELECT name FROM produse WHERE id IN (?);';
+                    con.query(fetchMasa1ProductsSql, [masa1Ids], (masa1Err, masa1Results) => {
+                        if (masa1Err) {
+                            console.error("Error fetching masa1 products:", masa1Err);
+                            res.status(500).send("Error fetching masa1 products");
+                        } else {
+                            // Fetch product names for masa2
+                            const fetchMasa2ProductsSql = 'SELECT name FROM produse WHERE id IN (?);';
+                            con.query(fetchMasa2ProductsSql, [masa2Ids], (masa2Err, masa2Results) => {
+                                if (masa2Err) {
+                                    console.error("Error fetching masa2 products:", masa2Err);
+                                    res.status(500).send("Error fetching masa2 products");
+                                } else {
+                                    // Fetch product names for masa3
+                                    const fetchMasa3ProductsSql = 'SELECT name FROM produse WHERE id IN (?);';
+                                    con.query(fetchMasa3ProductsSql, [masa3Ids], (masa3Err, masa3Results) => {
+                                        if (masa3Err) {
+                                            console.error("Error fetching masa3 products:", masa3Err);
+                                            res.status(500).send("Error fetching masa3 products");
+                                        } else {
+                                            // Render the 'istoric.ejs' template with the fetched data and selectedDate
+                                            res.render('istoric', {
+                                                userData: userData,
+                                                selectedDate: selectedDate,
+                                                masa1Products: masa1Results,
+                                                masa2Products: masa2Results,
+                                                masa3Products: masa3Results
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+            }
             // Render the 'istoric.ejs' template with the fetched data and selectedDate
             res.render('istoric', { userData: userData, selectedDate: selectedDate });
         }
