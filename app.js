@@ -146,6 +146,7 @@ app.get('/adaugare_masa', (req, res) => {
 
 
 
+
 app.get('/istoric', (req, res) => {
     const selectedDate = req.query.selectedDate; // Get the selected date from the query string
     console.log("selectedDate:", selectedDate);
@@ -171,86 +172,155 @@ app.get('/istoric', (req, res) => {
 
                 // Fetch products based on the non-empty IDs from 'masa1', 'masa2', and 'masa3'
                 const fetchProductsSql = 'SELECT id, name FROM produse WHERE id IN (?);';
-                
-                // Fetch products for masa1
-                con.query(fetchProductsSql, [nonEmptyMasa1Ids], (fetchMasa1Err, masa1Products) => {
-                    if (fetchMasa1Err) {
-                        console.error("Error fetching products for masa1:", fetchMasa1Err);
-                        res.status(500).send("Error fetching products for masa1");
-                    } else {
-                        // Fetch products for masa2 (conditionally)
-                        if (nonEmptyMasa2Ids.length > 0) {
-                            con.query(fetchProductsSql, [nonEmptyMasa2Ids], (fetchMasa2Err, masa2Products) => {
-                                if (fetchMasa2Err) {
-                                    console.error("Error fetching products for masa2:", fetchMasa2Err);
-                                    res.status(500).send("Error fetching products for masa2");
-                                } else {
-                                    // Fetch products for masa3 (conditionally)
-                                    if (nonEmptyMasa3Ids.length > 0) {
-                                        con.query(fetchProductsSql, [nonEmptyMasa3Ids], (fetchMasa3Err, masa3Products) => {
-                                            if (fetchMasa3Err) {
-                                                console.error("Error fetching products for masa3:", fetchMasa3Err);
-                                                res.status(500).send("Error fetching products for masa3");
-                                            } else {
-                                                // Render the 'istoric.ejs' template with the fetched data
-                                                res.render('istoric', {
-                                                    userData: userData,
-                                                    selectedDate: selectedDate,
-                                                    masa1Products: masa1Products,
-                                                    masa2Products: masa2Products,
-                                                    masa3Products: masa3Products
-                                                });
-                                            }
-                                        });
-                                    } else {
-                                        // Render the 'istoric.ejs' template with the fetched data (without masa3)
-                                        res.render('istoric', {
-                                            userData: userData,
-                                            selectedDate: selectedDate,
-                                            masa1Products: masa1Products,
-                                            masa2Products: masa2Products,
-                                            masa3Products: []
-                                        });
-                                    }
-                                }
-                            });
+
+                // Fetch products for masa1 (conditionally)
+                if (nonEmptyMasa1Ids.length > 0) {
+                    con.query(fetchProductsSql, [nonEmptyMasa1Ids], (fetchMasa1Err, masa1Products) => {
+                        if (fetchMasa1Err) {
+                            console.error("Error fetching products for masa1:", fetchMasa1Err);
+                            res.status(500).send("Error fetching products for masa1");
                         } else {
-                            // Fetch products for masa3 (conditionally)
-                            if (nonEmptyMasa3Ids.length > 0) {
-                                con.query(fetchProductsSql, [nonEmptyMasa3Ids], (fetchMasa3Err, masa3Products) => {
-                                    if (fetchMasa3Err) {
-                                        console.error("Error fetching products for masa3:", fetchMasa3Err);
-                                        res.status(500).send("Error fetching products for masa3");
+                            // Fetch products for masa2 (conditionally)
+                            if (nonEmptyMasa2Ids.length > 0) {
+                                con.query(fetchProductsSql, [nonEmptyMasa2Ids], (fetchMasa2Err, masa2Products) => {
+                                    if (fetchMasa2Err) {
+                                        console.error("Error fetching products for masa2:", fetchMasa2Err);
+                                        res.status(500).send("Error fetching products for masa2");
                                     } else {
-                                        // Render the 'istoric.ejs' template with the fetched data (without masa2)
-                                        res.render('istoric', {
-                                            userData: userData,
-                                            selectedDate: selectedDate,
-                                            masa1Products: masa1Products,
-                                            masa2Products: [],
-                                            masa3Products: masa3Products
-                                        });
+                                        // Fetch products for masa3 (conditionally)
+                                        if (nonEmptyMasa3Ids.length > 0) {
+                                            con.query(fetchProductsSql, [nonEmptyMasa3Ids], (fetchMasa3Err, masa3Products) => {
+                                                if (fetchMasa3Err) {
+                                                    console.error("Error fetching products for masa3:", fetchMasa3Err);
+                                                    res.status(500).send("Error fetching products for masa3");
+                                                } else {
+                                                    // Render the 'istoric.ejs' template with the fetched data
+                                                    res.render('istoric', {
+                                                        userData: userData,
+                                                        selectedDate: selectedDate,
+                                                        masa1Products: masa1Products,
+                                                        masa2Products: masa2Products,
+                                                        masa3Products: masa3Products
+                                                    });
+                                                }
+                                            });
+                                        } else {
+                                            // Render the 'istoric.ejs' template with the fetched data (without masa3)
+                                            res.render('istoric', {
+                                                userData: userData,
+                                                selectedDate: selectedDate,
+                                                masa1Products: masa1Products,
+                                                masa2Products: masa2Products,
+                                                masa3Products: []
+                                            });
+                                        }
                                     }
                                 });
                             } else {
-                                // Render the 'istoric.ejs' template with the fetched data (without masa2 and masa3)
-                                res.render('istoric', {
-                                    userData: userData,
-                                    selectedDate: selectedDate,
-                                    masa1Products: masa1Products,
-                                    masa2Products: [],
-                                    masa3Products: []
-                                });
+                                // Fetch products for masa3 (conditionally)
+                                if (nonEmptyMasa3Ids.length > 0) {
+                                    con.query(fetchProductsSql, [nonEmptyMasa3Ids], (fetchMasa3Err, masa3Products) => {
+                                        if (fetchMasa3Err) {
+                                            console.error("Error fetching products for masa3:", fetchMasa3Err);
+                                            res.status(500).send("Error fetching products for masa3");
+                                        } else {
+                                            // Render the 'istoric.ejs' template with the fetched data (without masa2)
+                                            res.render('istoric', {
+                                                userData: userData,
+                                                selectedDate: selectedDate,
+                                                masa1Products: masa1Products,
+                                                masa2Products: [],
+                                                masa3Products: masa3Products
+                                            });
+                                        }
+                                    });
+                                } else {
+                                    // Render the 'istoric.ejs' template with the fetched data (without masa2 and masa3)
+                                    res.render('istoric', {
+                                        userData: userData,
+                                        selectedDate: selectedDate,
+                                        masa1Products: masa1Products,
+                                        masa2Products: [],
+                                        masa3Products: []
+                                    });
+                                }
                             }
                         }
+                    });
+                } else {
+                    // Fetch products for masa2 (conditionally)
+                    if (nonEmptyMasa2Ids.length > 0) {
+                        con.query(fetchProductsSql, [nonEmptyMasa2Ids], (fetchMasa2Err, masa2Products) => {
+                            if (fetchMasa2Err) {
+                                console.error("Error fetching products for masa2:", fetchMasa2Err);
+                                res.status(500).send("Error fetching products for masa2");
+                            } else {
+                                // Fetch products for masa3 (conditionally)
+                                if (nonEmptyMasa3Ids.length > 0) {
+                                    con.query(fetchProductsSql, [nonEmptyMasa3Ids], (fetchMasa3Err, masa3Products) => {
+                                        if (fetchMasa3Err) {
+                                            console.error("Error fetching products for masa3:", fetchMasa3Err);
+                                            res.status(500).send("Error fetching products for masa3");
+                                        } else {
+                                            // Render the 'istoric.ejs' template with the fetched data (without masa1)
+                                            res.render('istoric', {
+                                                userData: userData,
+                                                selectedDate: selectedDate,
+                                                masa1Products: [],
+                                                masa2Products: masa2Products,
+                                                masa3Products: masa3Products
+                                            });
+                                        }
+                                    });
+                                } else {
+                                    // Render the 'istoric.ejs' template with the fetched data (without masa1 and masa3)
+                                    res.render('istoric', {
+                                        userData: userData,
+                                        selectedDate: selectedDate,
+                                        masa1Products: [],
+                                        masa2Products: masa2Products,
+                                        masa3Products: []
+                                    });
+                                }
+                            }
+                        });
+                    } else {
+                        // Fetch products for masa3 (conditionally)
+                        if (nonEmptyMasa3Ids.length > 0) {
+                            con.query(fetchProductsSql, [nonEmptyMasa3Ids], (fetchMasa3Err, masa3Products) => {
+                                if (fetchMasa3Err) {
+                                    console.error("Error fetching products for masa3:", fetchMasa3Err);
+                                    res.status(500).send("Error fetching products for masa3");
+                                } else {
+                                    // Render the 'istoric.ejs' template with the fetched data (without masa1 and masa2)
+                                    res.render('istoric', {
+                                        userData: userData,
+                                        selectedDate: selectedDate,
+                                        masa1Products: [],
+                                        masa2Products: [],
+                                        masa3Products: masa3Products
+                                    });
+                                }
+                            });
+                        } else {
+                            // Render the 'istoric.ejs' template with the fetched data (without masa1, masa2, and masa3)
+                            res.render('istoric', {
+                                userData: userData,
+                                selectedDate: selectedDate,
+                                masa1Products: [],
+                                masa2Products: [],
+                                masa3Products: []
+                            });
+                        }
                     }
-                });
+                }
             } else {
                 res.render('istoric', { userData: null, selectedDate: selectedDate });
             }
         }
     });
 });
+
 
 
 
