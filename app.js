@@ -42,10 +42,6 @@ app.use('/css', express.static('css'));
 //app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-    con.query("SELECT * FROM produse;", function (err, result, fields) {
-        if (err) throw err;
-        const produse = result;
-
         let templateName = 'index';
 
         if (req.cookies.tipUtilizator === "administrator") {
@@ -55,8 +51,7 @@ app.get('/', (req, res) => {
             templateName = 'index_normal';
         }
 
-        res.render(templateName, { produse: produse });
-    });
+        res.render(templateName);
 });
 
 
@@ -131,7 +126,12 @@ app.post('/save-selected-date', (req, res) => {
 
 app.get('/adaugare_masa', (req, res) => {
     con.query("SELECT * FROM produse", function (err, produseResult, fields) {
-        if (err) throw err;
+        if (err) {
+            res.render('mentenanta');
+            console.log('Site-ul este in mentenanta');
+
+        }
+        else{
         const produse = produseResult;
 
         con.query("SELECT * FROM user_date", function (err, userDataResult, fields) {
@@ -140,6 +140,7 @@ app.get('/adaugare_masa', (req, res) => {
             
             res.render('adaugare_masa', { produse: produse, userData: userData });
         });
+    }
     });
 });
 
@@ -153,8 +154,8 @@ app.get('/istoric', (req, res) => {
     const fetchDataSql = 'SELECT masa1, calorii_masa1, masa2, calorii_masa2, masa3, calorii_masa3 FROM user_date WHERE dataa = ?;';
     con.query(fetchDataSql, [selectedDate], (fetchErr, fetchResult) => {
         if (fetchErr) {
-            console.error("Error fetching data from user_date table:", fetchErr);
-            res.status(500).send("Error fetching data from user_date table");
+            res.render('mentenanta');
+            console.log('Site-ul este in mentenanta');
         } else {
             const userData = fetchResult[0];
 
