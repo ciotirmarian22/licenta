@@ -661,8 +661,11 @@ app.get('/creare-BD', (req,res) => {
 });
 
 
-
 app.get('/inserare-BD',(req,res) => {
+    res.render('inserare-BD.ejs');
+});
+
+app.get('/inserare-prestabilite', (req, res) => {
     con.connect(function(err) {
         if (err) throw err;
         console.log("Connected!");
@@ -688,5 +691,38 @@ app.get('/inserare-BD',(req,res) => {
         });
     });
 });
+
+app.get('/inserare-nou', (req, res) => {
+    
+    res.render('add-new-product.ejs'); // Render a form for adding a new product
+});
+
+/*app.get('/inserare-BD',(req,res) => {
+    con.connect(function(err) {
+        if (err) throw err;
+        console.log("Connected!");
+        var sql = "INSERT INTO produse (id,name, pret) VALUES ?";
+        var values = [
+            [1, 'Mere', 52],
+            [2, 'Banane', 96],
+            [3, 'Cartofi', 77],
+            [4, 'Ouă', 68],
+            [5, 'Pui fiert', 165],
+            [6, 'Brânză cheddar', 113],
+            [7, 'Orez brun', 215],
+            [8, 'Spanac', 7],
+            [9, 'Carne de vită', 250],
+            [10, 'Pâine integrală', 79]
+        ];
+        con.query(sql, [values],function (err, result) {
+            if (err) throw err;
+            console.log("Number of records inserted: "+ result.affectedRows);
+
+            // Send the response after the insertion is complete
+            res.redirect("http://localhost:6789/");
+        });
+    });
+});
+*/
 
 app.listen(port, () => console.log('Serverul rulează la adresa http://localhost:'));
