@@ -693,8 +693,34 @@ app.get('/inserare-prestabilite', (req, res) => {
 });
 
 app.get('/inserare-nou', (req, res) => {
-    
+    const productName = req.query.productName;
+    const productPrice = req.query.productPrice;
+
+    // Validate and process the form data
+    // You can perform additional validation and database insertion here
+
+    console.log('Product Name:', productName);
+    console.log('Product Price:', productPrice);
+
+
+    // Redirect or render a response as needed
+    //res.send('Product added successfully.'); // Replace this with your actual response
     res.render('add-new-product.ejs'); // Render a form for adding a new product
+
+    con.connect(function(err) {
+        if (err) throw err;
+        console.log("Connected!");
+        var sql = "INSERT INTO produse (name, pret) VALUES (?,?);";
+
+        con.query(sql, [productName, productPrice], (err,result) =>{
+            if(err){
+                console.error('Error inserting product:', err);
+            }
+            else{
+                console.log("produse inserate:", productName, productPrice)
+            }
+        });
+    });
 });
 
 /*app.get('/inserare-BD',(req,res) => {

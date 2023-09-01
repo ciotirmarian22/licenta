@@ -1,6 +1,6 @@
 <%- contentFor('body') %>
 
-<form action="/inserare-nou" method="POST">
+<form action="/inserare-nou" method="GET"> <!-- Use GET method -->
     <label for="productName">Product Name (letters and spaces only):</label>
     <input type="text" id="productName" name="productName" pattern="[A-Za-z ]+" required>
     <br><br>
