@@ -3,7 +3,7 @@
     padding: 0px;
 }
 body {
-    background-image: url('electrocasnice-emag-1-1133x568.jpg');
+    background-image: url('plan-alimentar.png');
 
 }
 header {
@@ -18,7 +18,7 @@ header p{
     transition: all .3s ease-in-out;
     text-align-last: right;
     padding-top: 5px;
-    padding-right: 350px;
+    padding-right: 400px;
     font-size: 120px;
     font-family: "Euclid Fraktur";  
 }
