@@ -1,8 +1,11 @@
 <%- contentFor('body') %>
+<br><br>
+<br><br>
+<br><br>
 
 <label for="data2"></label>
 <input class="culoare" type="date" id="data2" name="data">
-<button id="addEventButton2">Selecteaza data</button>
+<button id="addEventButton2" class="butoane_trimitere">Selecteaza data</button>
 <br><br>
 
 <h1>Istoric alimentar</h1>
@@ -37,7 +40,7 @@
 <p>Calorii Masa 3: <%= userData.calorii_masa3 %></p>
 <p>Calorii consumate: <%= userData.calorii_masa1 + userData.calorii_masa2 + userData.calorii_masa3 %></p>
 <% } else { %>
-<p>Va rugam selectati data pentru afisarea istoricului alimentar</p>
+<p style="color:rgb(0, 0, 0); font-size:25px; text-shadow: -1px -1px 0 #ffffff, 1px -1px 0 #fffcfc, -1px 1px 0 #ffffff, 1px 1px 0 #ffffff;">Va rugam selectati data pentru afisarea istoricului alimentar</p>
 <% } %>
 
 

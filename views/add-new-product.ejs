@@ -1,11 +1,14 @@
 <%- contentFor('body') %>
+<br><br>
+<br><br>
+<br><br>
 
 <form action="/inserare-nou" method="GET"> <!-- Use GET method -->
-    <label for="productName">Product Name (letters and spaces only):</label>
+    <label id="text_inserare_campuri" for="productName">Product Name (letters and spaces only):</label>
     <input type="text" id="productName" name="productName" pattern="[A-Za-z ]+" required>
     <br><br>
 
-    <label for="productPrice">Product Price (numbers only):</label>
+    <label id="text_inserare_campuri" for="productPrice">Product Price (numbers only):</label>
     <input type="text" id="productPrice" name="productPrice" pattern="[0-9]+" required>
     <br><br>
 

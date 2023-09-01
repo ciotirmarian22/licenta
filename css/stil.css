@@ -12,7 +12,7 @@ header {
 
 }
 header p{
-    color:white;
+    color:green;
     text-decoration: none;
     font-style: italic;
     transition: all .3s ease-in-out;
@@ -20,11 +20,11 @@ header p{
     padding-top: 5px;
     padding-right: 400px;
     font-size: 120px;
-    font-family: "Euclid Fraktur";  
+    font-family: "Euclid Fraktur";
 }
 #butoane a{
     text-decoration: none;
-    color:	#5e0403;
+    color:	#000000;
 }
 #butoane{
     display:table;
@@ -36,19 +36,21 @@ header p{
     font-family: 'Times New Roman', Times, serif;
     border-radius: 100px;
 }
-#buton_home{
+#buton_home {
     width: 120px;
     height: 70px;
-    opacity: 0.7;
-    background-color:  #dd0a0a;
-    color:rgb(255, 115, 0);
+    opacity: 0.8;
+    background-color: #0add38;
+    color: rgb(0, 0, 0);
     font-size: 0.8cm;
     font-family: 'Times New Roman', Times, serif;
     border-radius: 80px;
     position: absolute;
-    top:70px;
-    left:50px;
+    top: 170px;
+    left: 50px;
+    margin-bottom: 50px; /* Add margin to create empty space */
 }
+
 #buton_home a{
     text-decoration: none;
 }
@@ -161,4 +163,27 @@ div.rezultat_chestionar{
 .selected {
     background-color: #f0f0f0;
     font-weight: bold;
+}
+
+#text_inserare_campuri{
+    font-size:20px;
+    font-weight: bold;
+    color:#0c0247;
+    text-shadow: -1px -1px 0 #ffffff, 1px -1px 0 #fffcfc, -1px 1px 0 #ffffff, 1px 1px 0 #ffffff;
+}
+
+#text_inserare_campuri{
+    font-size:20px;
+    font-weight: bold;
+    color:#0c0247;
+    text-shadow: -1px -1px 0 #ffffff, 1px -1px 0 #fffcfc, -1px 1px 0 #ffffff, 1px 1px 0 #ffffff;
+}
+
+button.butoane_trimitere{
+    width: 120px;
+    background-color:  #02491a;
+    color:white;
+    font-size: 15px;
+    font-family: 'Times New Roman', Times, serif;
+    border-radius: 80px;
 }

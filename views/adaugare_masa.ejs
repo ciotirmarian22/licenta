@@ -1,12 +1,15 @@
 <%- contentFor('body') %>
+<br><br>
+<br><br>
+<br><br>
 
-<label for="data">Data:</label>
+<label id="text_inserare_campuri" for="data">Data:</label>
 <input class="culoare" type="date" id="data" name="data">
-<button id="addEventButton">Selecteaza data</button>
+<button id="addEventButton" class="butoane_trimitere">Selecteaza data</button>
 <br><br>
 
 <!-- Dropdown for 'masa' selection -->
-<label for="masaSelect">Selecteaza masa:</label>
+<label id="text_inserare_campuri" for="masaSelect">Selecteaza masa:</label>
 <select id="masaSelect" name="masaSelect">
     <option value="masa1">masa 1</option>
     <option value="masa2">masa 2</option>
@@ -24,9 +27,9 @@
 
 
 <div id="selectedProduct">
-    <h2>Produs selectat:</h2>
+    <p id="text_inserare_campuri">Produs selectat:</p>
     <p id="selectedProductName"></p>
-    <button id="addToDatabaseButton" disabled>Adaugare</button>
+    <button id="addToDatabaseButton" class="butoane_trimitere" disabled>Adaugare</button>
 </div>
 
 <!-- Include the following <script> tag -->
