@@ -597,7 +597,6 @@ app.get('/', (req, res) => {
     }
     res.render('index',{mesaj:mesaj});
 });
-// la accesarea din browser adresei http://localhost:6789/chestionar se va apela funcția specificată
 
 const fs = require('fs');
 let _intrebari;
@@ -607,20 +606,11 @@ fs.readFile('intrebari.json', (err, data) => {
   if (err) throw err;
   _intrebari = JSON.parse(data);
 
-  app.get('/chestionar', (req, res) => {
-    res.render('chestionar.ejs', { intrebari: _intrebari });
+  app.get('/calculator_calorii', (req, res) => {
+    res.render('calculator_calorii.ejs', { intrebari: _intrebari });
   });
 });
 
-app.post('/rezultat-chestionar', (req, res) => {
-	var ok = 0;
-	for (var x = 0; x< _intrebari.length ; x++)
-	{
-		if (req.body.intrebari[x] == _intrebari[x].corect)
-			ok++;
-	}
-	res.render('rezultat-chestionar.ejs',{ok})
-});
 
 //laborator11
 let _utilizatori; 

@@ -1,0 +1,91 @@
+<%- contentFor('body') %>
+
+<br><br>
+<br><br>
+<br><br>
+<form id="productForm">
+    <label id="text_inserare_campuri" for="inaltime">Inaltime:</label>
+    <input type="text" id="inaltime" required placeholder="Inaltime in cm"><br><br>
+
+    <label id="text_inserare_campuri" for="varsta">Varsta:</label>
+    <input type="text" id="varsta" required placeholder="Varsta"><br><br>
+
+    <label id="text_inserare_campuri" for="greutate">Greutate:</label>
+    <input type="text" id="greutate" required placeholder="Greutate in kg"><br><br>
+
+    <label id="text_inserare_campuri" for="category">Gen:</label>
+    <select id="category" required>
+        <option value="Masculin">Masculin</option>
+        <option value="Feminin">Feminin</option>
+    </select><br><br>
+
+    <button type="button" id="submitButton" class="butoane_trimitere" disabled>Submit</button>
+</form>
+
+<div id="resultContainer"></div>
+<% if (typeof calories !== 'undefined') { %>
+	<p><%= calories.toFixed(2) %></p>
+<% } %>
+
+<script>
+// calculator.js
+document.addEventListener('DOMContentLoaded', function () {
+    // Get references to form elements
+    const inaltimeInput = document.getElementById('inaltime');
+    const varstaInput = document.getElementById('varsta');
+    const greutateInput = document.getElementById('greutate');
+    const categorySelect = document.getElementById('category');
+    const submitButton = document.getElementById('submitButton');
+    const resultContainer = document.getElementById('resultContainer'); // Container to display the result
+
+    // Function to calculate calories based on gender
+    function calculateCalories() {
+        const inaltime = parseFloat(inaltimeInput.value.trim());
+        const varsta = parseFloat(varstaInput.value.trim());
+        const greutate = parseFloat(greutateInput.value.trim());
+        const category = categorySelect.value;
+
+        let calories = 0;
+
+        if (category === 'Masculin') {
+            calories = 655 + (9.6 * greutate) + (1.8 * inaltime) - (4.7 * varsta);
+			console.log("calories:",calories);
+        } else if (category === 'Feminin') {
+            calories = 66 + (13.7 * greutate) + (5 * inaltime) - (6.8 * varsta);
+			console.log("calories:",calories);
+        }
+
+        // Display the result
+        resultContainer.innerHTML = `Numarul recomandat de calorii pentru mentinerea greutatii este: ${calories.toFixed(2)}`;
+    }
+
+    // Function to check if all required fields are filled
+    function checkFields() {
+        const inaltimeValue = inaltimeInput.value.trim();
+        const varstaValue = varstaInput.value.trim();
+        const greutateValue = greutateInput.value.trim();
+        const categoryValue = categorySelect.value;
+
+        if (inaltimeValue !== '' && varstaValue !== '' && greutateValue !== '' && categoryValue !== '') {
+            submitButton.disabled = false;
+        } else {
+            submitButton.disabled = true;
+        }
+    }
+
+    // Add event listeners to the input fields and select element
+    inaltimeInput.addEventListener('input', checkFields);
+    varstaInput.addEventListener('input', checkFields);
+    greutateInput.addEventListener('input', checkFields);
+    categorySelect.addEventListener('change', checkFields);
+
+    // Add event listener to the submit button
+    submitButton.addEventListener('click', function () {
+        // Calculate and display calories when the button is pressed
+        calculateCalories();
+    });
+});
+</script>
+
+</body>
+</html>

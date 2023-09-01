@@ -119,32 +119,7 @@ div.autentificare{
     font-style:italic;
     font-size: 0.7cm;  
 }
-div.chestionar{
-    margin:40px 0px 0px 400px;
-    width:400px;
-    height: 2000px;
-    background-color: #f7f6b8;
-    opacity: 0.9;
-    border-radius: 90px;
-    padding-left:100px;
-    padding-right: 50px;
-    padding-top: 0px;
-    font-weight: bold;
-    font-size: larger;
-}
-div.rezultat_chestionar{
-    margin:180px 0px 0px 400px;
-    width:450px;
-    height: 50px;
-    background-color: #f7e8e7;
-    opacity: 0.9;
-    padding-left: 25px;
-    padding-top:25px;
-    padding-bottom:20px;
-    font-weight: bold;
-    font-size: larger;
-    border-radius: 90px;
-}
+
 
 #produse {
     font-size: 25px;
