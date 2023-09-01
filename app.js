@@ -117,8 +117,7 @@ app.post('/save-selected-date', (req, res) => {
     const sql = `INSERT INTO user_date (dataa) VALUES (?);`;
     con.query(sql, selectedDate, (err, result) => {
         if (err) {
-            console.error("Error inserting into user_date table:", err);
-            res.status(500).send("Error inserting into user_date table");
+            console.log('data selectata');
         } else {
             console.log("selected date added to user_date:", selectedDate);
 
@@ -669,18 +668,18 @@ app.get('/inserare-prestabilite', (req, res) => {
     con.connect(function(err) {
         if (err) throw err;
         console.log("Connected!");
-        var sql = "INSERT INTO produse (id,name, pret) VALUES ?";
+        var sql = "INSERT INTO produse (name, pret) VALUES ?";
         var values = [
-            [1, 'Mere', 52],
-            [2, 'Banane', 96],
-            [3, 'Cartofi', 77],
-            [4, 'Ouă', 68],
-            [5, 'Pui fiert', 165],
-            [6, 'Brânză cheddar', 113],
-            [7, 'Orez brun', 215],
-            [8, 'Spanac', 7],
-            [9, 'Carne de vită', 250],
-            [10, 'Pâine integrală', 79]
+            ['Mere', 52],
+            ['Banane', 96],
+            ['Cartofi', 77],
+            ['Ouă', 68],
+            ['Pui fiert', 165],
+            ['Brânză cheddar', 113],
+            ['Orez brun', 215],
+            ['Spanac', 7],
+            ['Carne de vită', 250],
+            ['Pâine integrală', 79]
         ];
         con.query(sql, [values],function (err, result) {
             if (err) throw err;
@@ -693,6 +692,8 @@ app.get('/inserare-prestabilite', (req, res) => {
 });
 
 app.get('/inserare-nou', (req, res) => {
+    res.render('add-new-product.ejs');
+
     const productName = req.query.productName;
     const productPrice = req.query.productPrice;
 
@@ -703,15 +704,11 @@ app.get('/inserare-nou', (req, res) => {
     console.log('Product Price:', productPrice);
 
 
-    // Redirect or render a response as needed
-    //res.send('Product added successfully.'); // Replace this with your actual response
-    res.render('add-new-product.ejs'); // Render a form for adding a new product
-
     con.connect(function(err) {
         if (err) throw err;
         console.log("Connected!");
         var sql = "INSERT INTO produse (name, pret) VALUES (?,?);";
-
+        if(productName != 'undefined' && productPrice != 'undefined')
         con.query(sql, [productName, productPrice], (err,result) =>{
             if(err){
                 console.error('Error inserting product:', err);

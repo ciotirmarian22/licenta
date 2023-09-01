@@ -2,38 +2,31 @@
 
 <label for="data">Data:</label>
 <input class="culoare" type="date" id="data" name="data">
-<button id="addEventButton">Add Event</button>
+<button id="addEventButton">Selecteaza data</button>
 <br><br>
 
 <!-- Dropdown for 'masa' selection -->
-<label for="masaSelect">Select Masa:</label>
+<label for="masaSelect">Selecteaza masa:</label>
 <select id="masaSelect" name="masaSelect">
-    <option value="masa1">Masa 1</option>
-    <option value="masa2">Masa 2</option>
-    <option value="masa3">Masa 3</option>
+    <option value="masa1">masa 1</option>
+    <option value="masa2">masa 2</option>
+    <option value="masa3">masa 3</option>
 </select>
 <br><br>
 
 <div id="calendar">
-    <input type="text" id="searchBar" placeholder="Search for products">
-    <input type="number" id="eventText" placeholder="Enter numeric value">
+    <input type="text" id="searchBar" placeholder="Cautare aliment">
+    <input type="number" id="eventText" placeholder="Introdu cantitatea(g)">
     <ul id="searchResults"></ul>
 </div>
 
-<div id="produse">
-    <h1>Masa1</h1>
-    <ul>
-        <% for (var i = 0; i < userData.length; i++) { %>
-        <li><%= userData[i].dataa %> - <%= userData[i].masa1 %> - <%= userData[i].calorii_masa1 %></li>
-        <% } %>
-    </ul>
-</div>
+
 
 
 <div id="selectedProduct">
-    <h2>Selected Product:</h2>
+    <h2>Produs selectat:</h2>
     <p id="selectedProductName"></p>
-    <button id="addToDatabaseButton" disabled>Add to Database</button>
+    <button id="addToDatabaseButton" disabled>Adaugare</button>
 </div>
 
 <!-- Include the following <script> tag -->
