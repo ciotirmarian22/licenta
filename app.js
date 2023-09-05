@@ -125,19 +125,17 @@ app.post('/save-selected-date', (req, res) => {
 
 
 app.get('/adaugare_masa', (req, res) => {
-    con.query("SELECT * FROM produse", function (err, produseResult, fields) {
+    con.query("SELECT * FROM produse;", function (err, produseResult, fields) {
         if (err) {
             res.render('mentenanta');
             console.log('Site-ul este in mentenanta');
-
         }
         else{
         const produse = produseResult;
-
-        con.query("SELECT * FROM user_date", function (err, userDataResult, fields) {
+        
+        con.query("SELECT * FROM user_date;", function (err, userDataResult, fields) {
             if (err) throw err;
             const userData = userDataResult;
-            
             res.render('adaugare_masa', { produse: produse, userData: userData });
         });
     }
@@ -635,7 +633,7 @@ app.get('/creare-BD', (req,res) => {
             con.query("USE licenta", function(err, result) {
                 if(err) throw err;
                 console.log("Use licenta");
-                con.query("CREATE TABLE if not exists produse (id INT(3), name VARCHAR(50), pret INT(15));", function (err, result) {
+                con.query("CREATE TABLE if not exists produse (id INT(3) AUTO_INCREMENT PRIMARY KEY,name VARCHAR(50),pret INT(15));", function (err, result) {
                     if (err) throw err;
                     console.log("Tabela produse a fost creata");
                 });
@@ -699,7 +697,7 @@ app.get('/inserare-nou', (req, res) => {
         if (err) throw err;
         console.log("Connected!");
         var sql = "INSERT INTO produse (name, pret) VALUES (?,?);";
-        if(productName != 'undefined' && productPrice != 'undefined')
+        if (productName && productPrice && productName.trim() !== '' && productPrice.trim() !== '')
         con.query(sql, [productName, productPrice], (err,result) =>{
             if(err){
                 console.error('Error inserting product:', err);

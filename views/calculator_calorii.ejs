@@ -22,7 +22,9 @@
     <button type="button" id="submitButton" class="butoane_trimitere" disabled>Submit</button>
 </form>
 
-<div id="resultContainer"></div>
+<div id="resultContainer"class="recomandare"></div>
+<div id="resultContainer2" class="recomandare"></div>
+<div id="resultContainer3" class="recomandare"></div>
 <% if (typeof calories !== 'undefined') { %>
 	<p><%= calories.toFixed(2) %></p>
 <% } %>
@@ -56,7 +58,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Display the result
-        resultContainer.innerHTML = `Numarul recomandat de calorii pentru mentinerea greutatii este: ${calories.toFixed(2)}`;
+        resultContainer.innerHTML = `Numarul recomandat de calorii pe zi pentru mentinerea greutatii este: ${calories.toFixed(2)}`;
+        resultContainer2.innerHTML = `Pentru a slabi 2kg pe luna consumul recomandat de calorii pe zi este ${(calories - 500).toFixed(2)}`;
+        resultContainer3.innerHTML = `Pentru a lua in greutate 2kg pe luna consumul recomandat de calorii pe zi este ${(calories + 500).toFixed(2)}`;
     }
 
     // Function to check if all required fields are filled

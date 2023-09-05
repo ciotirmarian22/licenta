@@ -3,7 +3,7 @@
     padding: 0px;
 }
 body {
-    background-image: url('plan-alimentar.png');
+    background-image: url('fundal.jpg');
 
 }
 header {
@@ -136,7 +136,7 @@ div.autentificare{
 
 /* Add this CSS to your existing CSS file or include a new CSS file */
 .selected {
-    background-color: #f0f0f0;
+    background-color: #5f5f5f;
     font-weight: bold;
 }
 
@@ -161,4 +161,10 @@ button.butoane_trimitere{
     font-size: 15px;
     font-family: 'Times New Roman', Times, serif;
     border-radius: 80px;
+}
+
+div.recomandare{
+    font-size:20px;
+    text-shadow: -1px -1px 0 #ffffff, 1px -1px 0 #fffcfc, -1px 1px 0 #ffffff, 1px 1px 0 #ffffff;
+    font-weight: bold;
 }
