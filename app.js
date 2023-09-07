@@ -149,6 +149,7 @@ app.get('/istoric', (req, res) => {
     const selectedDate = req.query.selectedDate; // Get the selected date from the query string
     console.log("selectedDate:", selectedDate);
 
+    if(selectedDate){
     const fetchDataSql = 'SELECT masa1, calorii_masa1, masa2, calorii_masa2, masa3, calorii_masa3 FROM user_date WHERE dataa = ?;';
     con.query(fetchDataSql, [selectedDate], (fetchErr, fetchResult) => {
         if (fetchErr) {
@@ -317,11 +318,10 @@ app.get('/istoric', (req, res) => {
             }
         }
     });
+}else {
+    res.render('istoric', { userData: null, selectedDate: selectedDate });
+}
 });
-
-
-
-
 
 
 
@@ -587,6 +587,11 @@ app.post("/add-to-masa3", (req, res) => {
     });
 });
 
+app.get('/calculator_calorii', (req, res) => {
+    res.render('calculator_calorii.ejs');
+});
+
+
 var mesaj="";
 app.get('/', (req, res) => {
     if(req.cookies != null && req.cookies.utilizator != null){
@@ -597,20 +602,7 @@ app.get('/', (req, res) => {
 });
 
 const fs = require('fs');
-let _intrebari;
 
-//laborator10
-fs.readFile('intrebari.json', (err, data) => {
-  if (err) throw err;
-  _intrebari = JSON.parse(data);
-
-  app.get('/calculator_calorii', (req, res) => {
-    res.render('calculator_calorii.ejs', { intrebari: _intrebari });
-  });
-});
-
-
-//laborator11
 let _utilizatori; 
 fs.readFile('utilizatori.json',(err,data) => {
  	if(err) throw err; 
@@ -659,16 +651,118 @@ app.get('/inserare-prestabilite', (req, res) => {
         console.log("Connected!");
         var sql = "INSERT INTO produse (name, pret) VALUES ?";
         var values = [
+            ['Fish and Chips', 650],
+            ['Chocolate Milkshake', 450],
+            ['Muffin cu ciocolată', 370],
+            ['Chips de tortilla', 140],
+            ['Big Mac', 563],
+            ['Oreo Milkshake', 690],
+            ['Onion Rings cu sos de ranch', 480],
+            ['Cheese Quesadilla', 440],
+            ['Biscuiți de unt cu ciocolată', 160],
+            ['Nachos cu chili și brânză', 410],
+            ['Sarmale', 300],
+            ['Mici', 250],
+            ['Ciorbă de burtă', 150],
+            ['Ciorbă de fasole', 180],
+            ['Mămăligă cu brânză și smântână', 350],
+            ['Tochitură moldovenească', 400],
+            ['Mucenici', 200],
+            ['Ciorbă de perișoare', 220],
+            ['Varză călită', 180],
+            ['Mămăligă cu sarmale', 400],
+            ['Ciorbă de legume', 100],
+            ['Mămăligă cu mămăliguță', 280],
+            ['Papanași', 300],
+            ['Ciorbă de pește', 220],
+            ['Mămăligă cu mujdei și brânză', 320],
+            ['Caltaboș', 280],
+            ['Mămăligă cu slănină și ceapă', 380],
+            ['Ciorbă rădăuțeană', 190],
+            ['Tocană', 280],
+            ['Mămăligă cu brânză și ou', 330],
+            ['Ciorbă de perișoare de pește', 250],
+            ['Mititei', 280],
+            ['Ciorbă de fasole cu afumătură', 240],
+            ['Cârnați de Plescoi', 300],
+            ['Ciorbă de pui cu taitei', 180],
+            ['Fasole bătută', 220],
+            ['Ciorbă de lobodă', 150],
+            ['Plăcintă cu brânză', 250],
+            ['Mămăligă cu tocană de ciuperci', 300],
+            ['Borcanele cu dulceață', 100],
+            ['Mămăligă cu brânză și smochine', 350],
+            ['Cozonac', 280],
+            ['Mămăligă cu mujdei și scrumbie', 320],
+            ['Balmos', 260],
+            ['Ciorbă de bame', 120],
+            ['Prajitură cu mere', 200],
+            ['Ciorbă de fasole cu ciolan', 280],
+            ['Pastramă', 300],
+            ['Ciorbă de legume cu bors', 150],
+            ['Morcovi', 41],
+            ['Broccoli', 55],
+            ['Castraveți', 16],
+            ['Salată verde', 5],
+            ['Castravete de mare', 13],
+            ['Căpșuni', 29],
             ['Mere', 52],
             ['Banane', 96],
-            ['Cartofi', 77],
-            ['Ouă', 68],
-            ['Pui fiert', 165],
-            ['Brânză cheddar', 113],
-            ['Orez brun', 215],
-            ['Spanac', 7],
-            ['Carne de vită', 250],
-            ['Pâine integrală', 79]
+            ['Pere', 57],
+            ['Portocale', 43],
+            ['Cireșe', 50],
+            ['Căpșuni', 29],
+            ['Kiwi', 41],
+            ['Lămâi', 29],
+            ['Mango', 60],
+            ['Pepene galben', 30],
+            ['Pepene roșu', 30],
+            ['Afine', 57],
+            ['Morcovi', 41],
+            ['Broccoli', 55],
+            ['Castraveți', 16],
+            ['Salată verde', 5],
+            ['Castravete de mare', 13],
+            ['Burger cu carne de vită', 250],
+            ['Cartofi prăjiți', 365],
+            ['Pizza pepperoni', 285],
+            ['Nuggets de pui', 220],
+            ['Hot dog', 150],
+            ['Sandwich cu șuncă și brânză', 320],
+            ['Clătită cu sirop de arțar', 350],
+            ['Cheeseburger', 300],
+            ['Cipsuri', 150],
+            ['Shaorma', 600],
+            ['Taco', 170],
+            ['Frigărui de pui', 180],
+            ['McFlurry cu ciocolată', 340],
+            ['Wrap cu pui', 250],
+            ['Coca-Cola (500ml)', 210],
+            ['Prăjitură cu ciocolată', 400],
+            ['Sos de maioneză (2 lingurițe)', 100],
+            ['Sos de ketchup (2 lingurițe)', 40],
+            ['Sos de ranch (2 lingurițe)', 110],
+            ['Pui crocant', 290],
+            ['Baton de ciocolată', 220],
+            ['Salată Cesar cu pui', 390],
+            ['Milkshake de ciocolată', 420],
+            ['Bacon Cheese Fries', 420],
+            ['Burrito', 350],
+            ['Chicken Fingers', 320],
+            ['Onion Rings', 400],
+            ['Donut cu ciocolată', 280],
+            ['Soda (500ml)', 180],
+            ['Cheese Fries', 450],
+            ['Nachos cu brânză', 390],
+            ['Chili Cheese Dog', 320],
+            ['Chicken Quesadilla', 450],
+            ['Sundae cu ciocolată', 280],
+            ['Pretzel cu sare', 340],
+            ['Pui Buffalo Wings', 290],
+            ['Cheese Curds', 370],
+            ['Milkshake de vanilie', 380],
+            ['Sandwich cu pește prăjit', 380],
+            ['Onion Strings', 380]
         ];
         con.query(sql, [values],function (err, result) {
             if (err) throw err;
@@ -709,32 +803,5 @@ app.get('/inserare-nou', (req, res) => {
     });
 });
 
-/*app.get('/inserare-BD',(req,res) => {
-    con.connect(function(err) {
-        if (err) throw err;
-        console.log("Connected!");
-        var sql = "INSERT INTO produse (id,name, pret) VALUES ?";
-        var values = [
-            [1, 'Mere', 52],
-            [2, 'Banane', 96],
-            [3, 'Cartofi', 77],
-            [4, 'Ouă', 68],
-            [5, 'Pui fiert', 165],
-            [6, 'Brânză cheddar', 113],
-            [7, 'Orez brun', 215],
-            [8, 'Spanac', 7],
-            [9, 'Carne de vită', 250],
-            [10, 'Pâine integrală', 79]
-        ];
-        con.query(sql, [values],function (err, result) {
-            if (err) throw err;
-            console.log("Number of records inserted: "+ result.affectedRows);
-
-            // Send the response after the insertion is complete
-            res.redirect("http://localhost:6789/");
-        });
-    });
-});
-*/
 
 app.listen(port, () => console.log('Serverul rulează la adresa http://localhost:'));
